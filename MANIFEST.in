@@ -1,0 +1,4 @@
+include *.py *.md
+exclude *.pyc *.pyo
+recursive-exclude kivy3 *.pyc *.pyo
+recursive-include kivy3 *.py *.glsl

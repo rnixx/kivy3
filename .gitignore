@@ -1,7 +1,12 @@
 *.pyo
 *.pyc
 *~
-build
-MANIFEST
-dist
-*.egg-info
+/kivy3.egg-info/
+/build
+/dist
+/bin
+/include
+/lib
+/local
+/share
+/.vscode
