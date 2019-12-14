@@ -1,0 +1,228 @@
+import math
+import os
+
+from kivy.lang import Builder
+from kivy.properties import ListProperty, ObjectProperty
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.slider import Slider
+
+import kivy3
+from kivy.app import App
+from kivy.uix.floatlayout import FloatLayout
+from kivy.clock import Clock
+from kivy3 import Mesh, Material
+from kivy3 import Scene, Renderer, PerspectiveCamera
+from kivy3.extras.geometries import BoxGeometry
+
+""" Demonstrate relative transform of children of a Mesh object """
+# Resources paths
+_this_path = os.path.dirname(os.path.realpath(__file__))
+shader_file = os.path.join(_this_path, "../extended.glsl")
+
+class ObjectTrackball(BoxLayout):
+
+    def __init__(self, camera, radius, *args, **kw):
+        super(ObjectTrackball, self).__init__(*args, **kw)
+        self.camera = camera
+        self.radius = radius
+        self.phi = 90
+        self.theta = 0
+        self._touches = []
+        self.camera.pos.z = radius
+        camera.look_at((0, 0, 0))
+
+    def define_rotate_angle(self, touch):
+        theta_angle = (touch.dx / self.width) * -360
+        phi_angle = -1 * (touch.dy / self.height) * 360
+        return phi_angle, theta_angle
+
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            if 'button' in touch.profile:
+                if touch.button == 'scrollup':
+                    if self.radius > 0:
+                        self.radius *= 1.1
+                    self.update_after_scroll()
+                elif touch.button == 'scrolldown':
+                    if self.radius > 0:
+                        self.radius *= 0.9
+                    self.update_after_scroll()
+                else:
+                    touch.grab(self)
+                    self._touches.append(touch)
+
+    def on_touch_up(self, touch):
+        touch.ungrab(self)
+        if touch in self._touches:
+            self._touches.remove(touch)
+        self.camera.update()
+
+    def on_touch_move(self, touch):
+        if touch in self._touches and touch.grab_current == self:
+            if len(self._touches) == 1:
+                self.do_rotate(touch)
+            elif len(self._touches) == 2:
+                pass
+
+    def do_rotate(self, touch):
+        d_phi, d_theta = self.define_rotate_angle(touch)
+        self.phi += d_phi
+        self.theta += d_theta
+
+        _phi = math.radians(self.phi)
+        _theta = math.radians(self.theta)
+        z = self.radius * math.cos(_theta) * math.sin(_phi)
+        x = self.radius * math.sin(_theta) * math.sin(_phi)
+        y = self.radius * math.cos(_phi)
+        self.camera.pos = x, y, z
+        self.camera.look_at((0, 0, 0))
+
+    def update_after_scroll(self):
+        _phi = math.radians(self.phi)
+        _theta = math.radians(self.theta)
+        z = self.radius * math.cos(_theta) * math.sin(_phi)
+        x = self.radius * math.sin(_theta) * math.sin(_phi)
+        y = self.radius * math.cos(_phi)
+        self.camera.pos = x, y, z
+        self.camera.look_at((0, 0, 0))
+
+
+class BaseBox(BoxLayout):
+    theta = ListProperty([0, 0, 0, 0, 0, 0, 0])
+    joints = []
+    renderer = ObjectProperty()
+
+    def on_theta(self, inst, value):
+        self.joints[5].rotation.y = value[4]
+        self.joints[4].rotation.y = value[3]
+        self.joints[3].rotation.y = value[2]
+        self.joints[2].rotation.x = value[1]
+        self.joints[1].rotation.y = -value[0]
+        self.joints[0].rotation.y = value[0]
+
+class SceneApp(App):
+    joints = []
+
+    def build(self):
+        root = BaseBox()
+
+        self.renderer = Renderer(shader_file=shader_file)
+        self.renderer.set_clear_color((.2, .2, .2, 1.))
+        self.scene = Scene()
+
+        self.manipulator = self.construct_manipulator()
+
+        camera = PerspectiveCamera(75, 0.01, 0.01, 1500)
+        trackball = ObjectTrackball(camera, 2)
+
+        self.scene.add(self.manipulator)
+        self.renderer.render(self.scene, camera)
+
+        trackball.add_widget(self.renderer)
+        root.add_widget(trackball)
+
+        self.renderer.bind(size=self._adjust_aspect)
+
+        root.joints = self.joints
+        root.renderer = self.renderer
+        return root
+
+    def _adjust_aspect(self, inst, val):
+        rsize = self.renderer.size
+        aspect = rsize[0] / float(rsize[1])
+        self.renderer.camera.aspect = aspect
+
+    def _rotate_cube(self, dt):
+        self.axis_e.rotation.x += 0
+        self.axis_e.rotation.y += 1
+        self.axis_e.rotation.z += 1
+
+    def _rotate_rect(self, dt):
+        self.axis_d.rotation.x += 0.5
+
+    def construct_manipulator(self):
+        material = Material(color=(0., 0., 1.), diffuse=(1., 1., 0.),
+                            specular=(.35, .35, .35))
+
+        # axis a
+        # one jaw
+        axis_a_geometry = create_joint_rectangle(0.1, 0.04, 0.01)
+        axis_a_left_mesh = Mesh(axis_a_geometry, material)
+        axis_a_right_mesh = Mesh(axis_a_geometry, material)
+        self.joints.append(axis_a_left_mesh)
+        self.joints.append(axis_a_right_mesh)
+
+        # axis b wrist
+        axis_b_dimensions = 0.2, 0.04, 0.04
+        axis_b_geometry = create_joint_rectangle(axis_b_dimensions[0], axis_b_dimensions[1], axis_b_dimensions[2])
+        material = Material(color=(1., 0., 0.), diffuse=(1., 1., 0.),
+                            specular=(.35, .35, .35))
+        axis_b_mesh = Mesh(axis_b_geometry, material)
+        self.joints.append(axis_b_mesh)
+
+        axis_b_mesh.add(axis_a_left_mesh)
+        axis_a_left_mesh.pos.x = axis_b_dimensions[0]
+        axis_a_left_mesh.pos.z = axis_b_dimensions[2] / 2
+
+        axis_b_mesh.add(axis_a_right_mesh)
+        axis_a_right_mesh.pos.x = axis_b_dimensions[0]
+        axis_a_right_mesh.pos.z = -axis_b_dimensions[2] / 2
+
+        # axis c bend
+        axis_c_dimensions = axis_b_dimensions[1], axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_c_geometry = create_joint_rectangle(axis_c_dimensions[0], axis_c_dimensions[1], axis_c_dimensions[2])
+        material = Material(color=(1., 1., 0.), diffuse=(1., 1., 0.),
+                            specular=(.35, .35, .35))
+        axis_c_mesh = Mesh(axis_c_geometry, material)
+        self.joints.append(axis_c_mesh)
+
+        axis_c_mesh.add(axis_b_mesh)
+        axis_b_mesh.pos.x = axis_c_dimensions[0]
+
+        # axis d bend
+        axis_d_dimensions = axis_b_dimensions[0], axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_d_geometry = create_joint_rectangle(axis_d_dimensions[0], axis_d_dimensions[1], axis_d_dimensions[2])
+        material = Material(color=(1., 0., 1.), diffuse=(1., 1., 0.),
+                            specular=(.35, .35, .35))
+        axis_d_mesh = Mesh(axis_d_geometry, material)
+        self.joints.append(axis_d_mesh)
+
+        axis_d_mesh.add(axis_c_mesh)
+        axis_c_mesh.pos.x = axis_d_dimensions[0]
+
+        # axis e mesh
+        axis_e_dimensions = axis_b_dimensions[1], axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_e_geometry = create_joint_rectangle(axis_e_dimensions[0], axis_e_dimensions[1], axis_e_dimensions[2])
+        material = Material(color=(0., 1., 0.), diffuse=(1., 1., 0.),
+                            specular=(.35, .35, .35))
+        axis_e_mesh = Mesh(axis_e_geometry, material)
+        self.joints.append(axis_e_mesh)
+
+        axis_e_mesh.add(axis_d_mesh)
+        axis_d_mesh.pos.x = axis_e_dimensions[0]
+
+        # base
+        base_dimensions = axis_b_dimensions
+        base_geometry = create_joint_rectangle(base_dimensions[0], base_dimensions[1], base_dimensions[2])
+        material = Material(color=(0., 1., 1.), diffuse=(1., 1., 0.),
+                            specular=(.35, .35, .35))
+        base_mesh = Mesh(base_geometry, material)
+        self.joints.append(base_mesh)
+
+        base_mesh.add(axis_e_mesh)
+        axis_e_mesh.pos.x = base_dimensions[0]
+        axis_e_mesh.rotation.z = -90
+
+        return base_mesh
+
+
+def create_joint_rectangle(x, y, z):
+    geometry = BoxGeometry(x, y, z)
+    for i in range(len(geometry.vertices)):
+        geometry.vertices[i][0] += (x / 2)
+    return geometry
+
+
+if __name__ == '__main__':
+    Builder.load_file('children.kv')
+    SceneApp().run()
