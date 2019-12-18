@@ -19,6 +19,15 @@ from kivy3.extras.geometries import BoxGeometry
 _this_path = os.path.dirname(os.path.realpath(__file__))
 shader_file = os.path.join(_this_path, "../extended.glsl")
 
+JOINT_OFFSET_A_1 = [0, 0.0325, -0.21382]
+JOINT_OFFSET_A_2 = [0, -0.0325, -0.21382]
+JOINT_OFFSET_B = [0.04091, 0, 0]
+JOINT_OFFSET_C = [0.0409, 0, -0.2007]
+JOINT_OFFSET_D = [0.0408, 0, 0]
+JOINT_OFFSET_E = [0.2896, 0, 0]
+JOINT_OFFSET_F = [0.046, 0, 0.10976]
+JOINT_OFFSET_G = [0, 0, 0]
+
 class ObjectTrackball(BoxLayout):
 
     def __init__(self, camera, radius, *args, **kw):
@@ -93,12 +102,14 @@ class BaseBox(BoxLayout):
     renderer = ObjectProperty()
 
     def on_theta(self, inst, value):
-        self.joints[5].rotation.y = value[4]
-        self.joints[4].rotation.y = value[3]
-        self.joints[3].rotation.y = value[2]
-        self.joints[2].rotation.x = value[1]
+        self.joints[7].rotation.x = value[6]  # g
+        self.joints[6].rotation.z = value[5]  # f
+        self.joints[5].rotation.z = value[4]  # e
+        self.joints[4].rotation.x = value[3]  # d
+        self.joints[3].rotation.z = value[2]  # c
+        self.joints[2].rotation.x = value[1]  # b
         self.joints[1].rotation.y = -value[0]
-        self.joints[0].rotation.y = value[0]
+        self.joints[0].rotation.y = value[0]  # a
 
 class SceneApp(App):
     joints = []
@@ -117,6 +128,8 @@ class SceneApp(App):
 
         self.scene.add(self.manipulator)
         self.renderer.render(self.scene, camera)
+
+        self.renderer.main_light.intensity = 3000
 
         trackball.add_widget(self.renderer)
         root.add_widget(trackball)
@@ -153,9 +166,9 @@ class SceneApp(App):
         self.joints.append(axis_a_right_mesh)
 
         # axis b wrist
-        axis_b_dimensions = 0.2, 0.04, 0.04
+        axis_b_dimensions = 0.1, 0.04, 0.04
         axis_b_geometry = create_joint_rectangle(axis_b_dimensions[0], axis_b_dimensions[1], axis_b_dimensions[2])
-        material = Material(color=(1., 0., 0.), diffuse=(1., 1., 0.),
+        material = Material(color=(1., 0., 0.), diffuse=(1., 0., 0.),
                             specular=(.35, .35, .35))
         axis_b_mesh = Mesh(axis_b_geometry, material)
         self.joints.append(axis_b_mesh)
@@ -169,7 +182,7 @@ class SceneApp(App):
         axis_a_right_mesh.pos.z = -axis_b_dimensions[2] / 2
 
         # axis c bend
-        axis_c_dimensions = axis_b_dimensions[1], axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_c_dimensions = 0.04, axis_b_dimensions[1], axis_b_dimensions[2]
         axis_c_geometry = create_joint_rectangle(axis_c_dimensions[0], axis_c_dimensions[1], axis_c_dimensions[2])
         material = Material(color=(1., 1., 0.), diffuse=(1., 1., 0.),
                             specular=(.35, .35, .35))
@@ -182,7 +195,7 @@ class SceneApp(App):
         # axis d bend
         axis_d_dimensions = axis_b_dimensions[0], axis_b_dimensions[1], axis_b_dimensions[2]
         axis_d_geometry = create_joint_rectangle(axis_d_dimensions[0], axis_d_dimensions[1], axis_d_dimensions[2])
-        material = Material(color=(1., 0., 1.), diffuse=(1., 1., 0.),
+        material = Material(color=(1., 0., 1.), diffuse=(1., 0., 1.),
                             specular=(.35, .35, .35))
         axis_d_mesh = Mesh(axis_d_geometry, material)
         self.joints.append(axis_d_mesh)
@@ -193,7 +206,7 @@ class SceneApp(App):
         # axis e mesh
         axis_e_dimensions = axis_b_dimensions[1], axis_b_dimensions[1], axis_b_dimensions[2]
         axis_e_geometry = create_joint_rectangle(axis_e_dimensions[0], axis_e_dimensions[1], axis_e_dimensions[2])
-        material = Material(color=(0., 1., 0.), diffuse=(1., 1., 0.),
+        material = Material(color=(0., 1., 0.), diffuse=(0., 1., 0.),
                             specular=(.35, .35, .35))
         axis_e_mesh = Mesh(axis_e_geometry, material)
         self.joints.append(axis_e_mesh)
@@ -201,17 +214,42 @@ class SceneApp(App):
         axis_e_mesh.add(axis_d_mesh)
         axis_d_mesh.pos.x = axis_e_dimensions[0]
 
+        # axis f
+        axis_f_dimensions = axis_b_dimensions
+        axis_f_geometry = create_joint_rectangle(axis_f_dimensions[0], axis_f_dimensions[1], axis_f_dimensions[2])
+        material = Material(color=(0., 1., 1.), diffuse=(0., 1., 1.),
+                            specular=(.35, .35, .35))
+        axis_f_mesh = Mesh(axis_f_geometry, material)
+        self.joints.append(axis_f_mesh)
+
+        axis_f_mesh.add(axis_e_mesh)
+        axis_e_mesh.pos.x = axis_f_dimensions[0]
+
+        # axis_g
+        axis_g_dimensions = 0.05, axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_g_geometry = create_joint_rectangle(axis_g_dimensions[0], axis_g_dimensions[1], axis_g_dimensions[2])
+        material = Material(color=(1., .4, .1), diffuse=(1., .4, .1),
+                            specular=(.35, .35, .35))
+        axis_g_mesh = Mesh(axis_g_geometry, material)
+        self.joints.append(axis_g_mesh)
+
+        axis_g_mesh.add(axis_f_mesh)
+        axis_f_mesh.pos.x = axis_g_dimensions[0]
+        axis_f_mesh.rotation.z = -90
+
         # base
-        base_dimensions = axis_b_dimensions
+        base_dimensions = 0.05, axis_b_dimensions[1], axis_b_dimensions[2]
         base_geometry = create_joint_rectangle(base_dimensions[0], base_dimensions[1], base_dimensions[2])
-        material = Material(color=(0., 1., 1.), diffuse=(1., 1., 0.),
+        material = Material(color=(0., 1., 1.), diffuse=(0., 1., 1.),
                             specular=(.35, .35, .35))
         base_mesh = Mesh(base_geometry, material)
         self.joints.append(base_mesh)
 
-        base_mesh.add(axis_e_mesh)
-        axis_e_mesh.pos.x = base_dimensions[0]
-        axis_e_mesh.rotation.z = -90
+        base_mesh.add(axis_g_mesh)
+        base_mesh.rotation.z = 90
+
+        axis_g_mesh.pos.x = base_dimensions[0]
+        axis_g_mesh.rotation.z = -90
 
         return base_mesh
 
@@ -221,6 +259,13 @@ def create_joint_rectangle(x, y, z):
     for i in range(len(geometry.vertices)):
         geometry.vertices[i][0] += (x / 2)
     return geometry
+
+
+def get_joint_hypo_length(xyz):
+    squares = 0
+    for n in xyz:
+        squares += math.pow(n, 2)
+    return math.sqrt(squares)
 
 
 if __name__ == '__main__':
