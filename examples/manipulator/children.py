@@ -19,14 +19,28 @@ from kivy3.extras.geometries import BoxGeometry
 _this_path = os.path.dirname(os.path.realpath(__file__))
 shader_file = os.path.join(_this_path, "../extended.glsl")
 
+JOINT_SIZE_A = [0.140, 0.030, 0.050]
 JOINT_OFFSET_A_1 = [0, 0.0325, -0.21382]
 JOINT_OFFSET_A_2 = [0, -0.0325, -0.21382]
+
+JOINT_SIZE_B = [0.21382, 0.0408, 0.0408]
 JOINT_OFFSET_B = [0.04091, 0, 0]
+
+JOINT_SIZE_C = [0.077, 0.0408, 0.0408]
 JOINT_OFFSET_C = [0.0409, 0, -0.2007]
+
+JOINT_SIZE_D = [0.2007, 0.0408, 0.0408]
 JOINT_OFFSET_D = [0.0408, 0, 0]
+
+JOINT_SIZE_E = [0.077, 0.0408, 0.0408]
 JOINT_OFFSET_E = [0.2896, 0, 0]
+
+JOINT_SIZE_F = [0.290, 0.046, 0.046]
 JOINT_OFFSET_F = [0.046, 0, 0.10976]
+
+JOINT_SIZE_G = [0.145, 0.046, 0.046]
 JOINT_OFFSET_G = [0, 0, 0]
+
 
 class ObjectTrackball(BoxLayout):
 
@@ -159,14 +173,15 @@ class SceneApp(App):
 
         # axis a
         # one jaw
-        axis_a_geometry = create_joint_rectangle(0.1, 0.04, 0.01)
+        axis_a_dimensions = JOINT_SIZE_A[0], JOINT_SIZE_A[2], JOINT_SIZE_A[1]
+        axis_a_geometry = create_joint_rectangle(axis_a_dimensions[0], axis_a_dimensions[1], axis_a_dimensions[2])
         axis_a_left_mesh = Mesh(axis_a_geometry, material)
         axis_a_right_mesh = Mesh(axis_a_geometry, material)
         self.joints.append(axis_a_left_mesh)
         self.joints.append(axis_a_right_mesh)
 
         # axis b wrist
-        axis_b_dimensions = 0.1, 0.04, 0.04
+        axis_b_dimensions = get_joint_hypo_length(JOINT_OFFSET_A_1), JOINT_SIZE_B[1], JOINT_SIZE_B[2]
         axis_b_geometry = create_joint_rectangle(axis_b_dimensions[0], axis_b_dimensions[1], axis_b_dimensions[2])
         material = Material(color=(1., 0., 0.), diffuse=(1., 0., 0.),
                             specular=(.35, .35, .35))
@@ -182,7 +197,7 @@ class SceneApp(App):
         axis_a_right_mesh.pos.z = -axis_b_dimensions[2] / 2
 
         # axis c bend
-        axis_c_dimensions = 0.04, axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_c_dimensions = get_joint_hypo_length(JOINT_OFFSET_B), JOINT_SIZE_C[1], JOINT_SIZE_C[2]
         axis_c_geometry = create_joint_rectangle(axis_c_dimensions[0], axis_c_dimensions[1], axis_c_dimensions[2])
         material = Material(color=(1., 1., 0.), diffuse=(1., 1., 0.),
                             specular=(.35, .35, .35))
@@ -193,7 +208,7 @@ class SceneApp(App):
         axis_b_mesh.pos.x = axis_c_dimensions[0]
 
         # axis d bend
-        axis_d_dimensions = axis_b_dimensions[0], axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_d_dimensions = get_joint_hypo_length(JOINT_OFFSET_C), JOINT_SIZE_D[1], JOINT_SIZE_D[2]
         axis_d_geometry = create_joint_rectangle(axis_d_dimensions[0], axis_d_dimensions[1], axis_d_dimensions[2])
         material = Material(color=(1., 0., 1.), diffuse=(1., 0., 1.),
                             specular=(.35, .35, .35))
@@ -204,7 +219,7 @@ class SceneApp(App):
         axis_c_mesh.pos.x = axis_d_dimensions[0]
 
         # axis e mesh
-        axis_e_dimensions = axis_b_dimensions[1], axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_e_dimensions = get_joint_hypo_length(JOINT_OFFSET_D), JOINT_SIZE_E[1], JOINT_SIZE_E[2]
         axis_e_geometry = create_joint_rectangle(axis_e_dimensions[0], axis_e_dimensions[1], axis_e_dimensions[2])
         material = Material(color=(0., 1., 0.), diffuse=(0., 1., 0.),
                             specular=(.35, .35, .35))
@@ -215,7 +230,7 @@ class SceneApp(App):
         axis_d_mesh.pos.x = axis_e_dimensions[0]
 
         # axis f
-        axis_f_dimensions = axis_b_dimensions
+        axis_f_dimensions = get_joint_hypo_length(JOINT_OFFSET_E), JOINT_SIZE_F[1], JOINT_SIZE_F[2]
         axis_f_geometry = create_joint_rectangle(axis_f_dimensions[0], axis_f_dimensions[1], axis_f_dimensions[2])
         material = Material(color=(0., 1., 1.), diffuse=(0., 1., 1.),
                             specular=(.35, .35, .35))
@@ -226,7 +241,7 @@ class SceneApp(App):
         axis_e_mesh.pos.x = axis_f_dimensions[0]
 
         # axis_g
-        axis_g_dimensions = 0.05, axis_b_dimensions[1], axis_b_dimensions[2]
+        axis_g_dimensions = get_joint_hypo_length(JOINT_OFFSET_F), JOINT_SIZE_G[1], JOINT_SIZE_G[2]
         axis_g_geometry = create_joint_rectangle(axis_g_dimensions[0], axis_g_dimensions[1], axis_g_dimensions[2])
         material = Material(color=(1., .4, .1), diffuse=(1., .4, .1),
                             specular=(.35, .35, .35))
