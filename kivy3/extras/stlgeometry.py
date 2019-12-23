@@ -13,7 +13,9 @@ class STLGeometry(Geometry):
 
     def _build_mesh(self, stl_mesh):
 
-        for i in range(stl_mesh.attr.size):
+        # min(..., 65534//3) is a hack to keep large meshes from crashing
+        # OpenGL restricts number of vertices <= 65535
+        for i in range(min(stl_mesh.attr.size, 65534//3)):
             for j in range(3):
                 v = Vector3(stl_mesh.vectors[i][j][0],
                             stl_mesh.vectors[i][j][1],
@@ -28,17 +30,3 @@ class STLGeometry(Geometry):
                                    stl_mesh.normals[i][2])
             face3.vertex_normals = [face3.normal, face3.normal, face3.normal]
             self.faces.append(face3)
-
-        # for v in self._cube_vertices:
-        #     v = Vector3(0.5 * v[0] * self.w,
-        #                 0.5 * v[1] * self.h,
-        #                 0.5 * v[2] * self.d)
-        #     self.vertices.append(v)
-
-        # n_idx = 0
-        # for f in self._cube_faces:
-        #     face3 = Face3(*f)
-        #     normal = self._cube_normals[int(n_idx / 2)]
-        #     face3.vertex_normals = [normal, normal, normal]
-        #     n_idx += 1
-        #     self.faces.append(face3)

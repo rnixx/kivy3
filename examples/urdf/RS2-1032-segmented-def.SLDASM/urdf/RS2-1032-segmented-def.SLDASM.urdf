@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="RS2-1032-segmented-def.SLDASM">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.00016483 0.016209 -0.031073"
+        rpy="0 0 0" />
+      <mass
+        value="1.9526" />
+      <inertia
+        ixx="0.0025846"
+        ixy="2.75E-06"
+        ixz="3.4699E-06"
+        iyy="0.0022058"
+        iyz="8.7505E-05"
+        izz="0.0033254" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="1013_base_def_link">
+    <inertial>
+      <origin
+        xyz="0.00846442048222188 -0.0244828952793989 -0.0604426144580424"
+        rpy="0 0 0" />
+      <mass
+        value="2.06786570255906" />
+      <inertia
+        ixx="0.00330228576538137"
+        ixy="0.000296034252344081"
+        ixz="0.000245877108833608"
+        iyy="0.00216229029272983"
+        iyz="-0.000684378910293875"
+        izz="0.00283007907340177" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/1013_base_def_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/1013_base_def_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="1013_base_def"
+    type="continuous">
+    <origin
+      xyz="0 0.05395 0"
+      rpy="1.5708 -0.46319 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="1013_base_def_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="1013_to_1015_Link">
+    <inertial>
+      <origin
+        xyz="-0.000487514879235436 -0.0369953948620713 0.151825587376245"
+        rpy="0 0 0" />
+      <mass
+        value="5.09011902544766" />
+      <inertia
+        ixx="0.0126488889907415"
+        ixy="0.000211984162224523"
+        ixz="-0.000505692002205725"
+        iyy="0.0114931112639823"
+        iyz="6.52340603510238E-05"
+        izz="0.00531786957771513" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/1013_to_1015_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/1013_to_1015_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="1013_to_1015"
+    type="continuous">
+    <origin
+      xyz="0.00063815 -0.045996 -0.08105"
+      rpy="3.0057 0 0.013873" />
+    <parent
+      link="1013_base_def_link" />
+    <child
+      link="1013_to_1015_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="wrist_link">
+    <inertial>
+      <origin
+        xyz="-0.00582188522450621 -0.033946570329577 0.0461603564021656"
+        rpy="0 0 0" />
+      <mass
+        value="1.38780459487003" />
+      <inertia
+        ixx="0.00225710635072821"
+        ixy="0.00024399002823621"
+        ixz="-0.000382469110966876"
+        iyy="0.00195339841112262"
+        iyz="0.000467729057149552"
+        izz="0.00159105030903304" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/wrist_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/wrist_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wrist_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.0052 0.29055"
+      rpy="-1.9629 0 0" />
+    <parent
+      link="1013_to_1015_Link" />
+    <child
+      link="wrist_link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="Gripper_shell_Link">
+    <inertial>
+      <origin
+        xyz="4.50371247253528E-06 -5.78992402949785E-06 0.00219060495043921"
+        rpy="0 0 0" />
+      <mass
+        value="1.50806599143341" />
+      <inertia
+        ixx="0.00127659366740391"
+        ixy="-2.01803846534523E-09"
+        ixz="-6.39820465131428E-08"
+        iyy="0.00128628097690415"
+        iyz="1.04392496520268E-08"
+        izz="0.00105995943105122" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/Gripper_shell_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/Gripper_shell_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Gripper_rotation_joint"
+    type="continuous">
+    <origin
+      xyz="0.00085 -0.0408 0.14468"
+      rpy="0 0 0.10254" />
+    <parent
+      link="wrist_link" />
+    <child
+      link="Gripper_shell_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="outer_jaw_link">
+    <inertial>
+      <origin
+        xyz="-6.71044070865712E-08 -0.016911154862324 -0.0527047050815737"
+        rpy="0 0 0" />
+      <mass
+        value="0.162220004429464" />
+      <inertia
+        ixx="0.000175262774111366"
+        ixy="-9.13801796657195E-11"
+        ixz="1.51217957387224E-10"
+        iyy="0.000207264645543673"
+        iyz="-3.35885580014535E-05"
+        izz="6.41428269506169E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/outer_jaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0941176470588235 0.0941176470588235 0.0941176470588235 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/outer_jaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="outer_jaw_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.033 0.069764"
+      rpy="-3.1177 0 0" />
+    <parent
+      link="Gripper_shell_Link" />
+    <child
+      link="outer_jaw_link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="inner_jaw_link">
+    <inertial>
+      <origin
+        xyz="-0.000499945320877902 -0.0168214296120889 -0.052130148670525"
+        rpy="0 0 0" />
+      <mass
+        value="0.151326462558286" />
+      <inertia
+        ixx="0.00017374137210143"
+        ixy="7.13711135030736E-11"
+        ixz="1.81002026488759E-10"
+        iyy="0.000180459971786324"
+        iyz="-3.37841879506283E-05"
+        izz="3.82414517967857E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/inner_jaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0941176470588235 0.0941176470588235 0.0941176470588235 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-1032-segmented-def.SLDASM/meshes/inner_jaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Inner_jaw_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.033 0.069764"
+      rpy="3.1262 0 -3.1416" />
+    <parent
+      link="Gripper_shell_Link" />
+    <child
+      link="inner_jaw_link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+</robot>

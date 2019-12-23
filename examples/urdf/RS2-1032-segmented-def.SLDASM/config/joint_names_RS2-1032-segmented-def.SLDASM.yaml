@@ -1,0 +1,1 @@
+controller_joint_names: ['', '1013_base_def', '1013_to_1015', 'wrist_joint', 'Gripper_rotation_joint', 'outer_jaw_joint', 'Inner_jaw_joint', ]
