@@ -1,4 +1,8 @@
 ---VERTEX SHADER-------------------------------------------------------
+/**
+* Based on: https://learnopengl.com/Advanced-Lighting/Advanced-Lighting
+*/
+
 #ifdef GL_ES
     precision highp float;
 #endif
@@ -48,6 +52,7 @@ uniform vec3 Kd; // diffuse color
 uniform vec3 Ks; // specular color
 uniform float Tr; // transparency
 uniform float Ns; // shininess
+uniform float d; // dissolve
 
 void main (void){
     vec4 color = texture2D(tex, uv_vec);
