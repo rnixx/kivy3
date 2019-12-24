@@ -1,7 +1,7 @@
 """
 The MIT License (MIT)
 
-Copyright (c) 2013 Niko Skrypnik
+Copyright (c) 2019 Shaun Barlow
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,20 +23,22 @@ THE SOFTWARE.
 """
 
 """
-Geometry class
+Line2 class
 =============
+
+This class should store information about line. Should be used
+with some vertices information as it doesn't contain vertices itself,
+but only its indices
 
 """
 
+from kivy3 import Vector3, Geometry
 
-class Geometry(object):
 
-    def __init__(self, name=''):
-        self.name = name
-        self.faces = []
-        self.vertices = []
-        self.face_vertex_uvs = [[]]
-        self.lines = []
+class Line2(object):
 
-    def compute_vertex_normal(self):
-        pass
+    def __init__(self, a, b, normal=None):
+        self.a = a
+        self.b = b
+        self.normal = normal or Vector3(0, 0, 0)  # face normal
+        self.vertex_normals = []  # vertices normals
