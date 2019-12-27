@@ -32,7 +32,8 @@ MATERIAL_TO_SHADER_MAP = {
     "diffuse": "Kd",
     "specular": "Ks",
     "shininess": "Ns",  # specular coefficient
-    "texture_ratio": "tex_ratio"
+    "texture_ratio": "tex_ratio",
+    "id_color": "id_color"
 }
 
 
@@ -44,7 +45,7 @@ class Material(ChangeState):
 
     def __init__(self, map=None, transparency=1.0, color=(1, 1, 1),
                  diffuse=(0, 0, 0), specular=(0, 0, 0),
-                 shininess=10.0, texture_ratio=0.0, **kwargs):
+                 shininess=10.0, texture_ratio=0.0, id_color=(0, 0, 0), **kwargs):
         self.map = map
         super(Material, self).__init__()
         transparency = float(transparency)
@@ -53,6 +54,7 @@ class Material(ChangeState):
         specular = tuple(float(s) for s in specular)
         shininess = float(shininess)
         texture_ratio = float(texture_ratio)
+        id_color = tuple(float(i/255.) for i in id_color)
 
         # set attribute from locals
         for k, v in locals().items():
