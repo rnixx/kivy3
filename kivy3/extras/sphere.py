@@ -28,9 +28,9 @@ from kivy3.core.geometry import Geometry
 from kivy3.core.face3 import Face3
 
 
-class PrismGeometry(Geometry):
+class SphereGeometry(Geometry):
 
-    def __init__(self, radius=1, height=1, segments=32, radius_top=None, **kw):
+    def __init__(self, radius=1, sectors=36, stacks=18, **kw):
         """
 
         :param radius:
@@ -40,77 +40,130 @@ class PrismGeometry(Geometry):
         :param kw:
         """
         name = kw.pop('name', '')
-        super(PrismGeometry, self).__init__(name)
+        super(SphereGeometry, self).__init__(name)
 
-        self.r = radius
-        self.h = height
-        self.segments = segments
-        if not radius_top:
-            radius_top = radius
+        self.build_sphere(radius, sectors, stacks)
 
-        self._build_polygon(radius, 0, segments, reverse_vertex_order=True)
-        self._build_polygon(radius_top, height, segments)
-        self._build_cylinder()
+    def build_sphere(self, radius, sectors, stacks):
 
-    def _build_cylinder(self):
-        """
-        Generate faces between top and bottom faces
-        :return:
-        """
-        top_circle_vertex_start_index = len(self.vertices) // 2
+        for i in range(stacks):
+            stack_angle = math.pi * ((1 / 2) - (i / stacks))
+            xy = radius * math.cos(stack_angle)
+            z = radius * math.sin(stack_angle)
 
-        for i in range(top_circle_vertex_start_index):
-            base_v0 = i
-            base_v1 = i + 1
-            top_v0 = i + top_circle_vertex_start_index
-            top_v1 = top_v0 + 1
-            if base_v1 == top_circle_vertex_start_index:
-                base_v1 = 0
-                top_v1 = top_circle_vertex_start_index
+            # add(sectorCount + 1) vertices per stack
+            # the first and last vertices have same position and normal, but different tex coords
+            for j in range(sectors):
+                sector_angle = j * 2 * math.pi / sectors
 
-            # two points on first circle, one on second circle
-            face = Face3(base_v0, base_v1, top_v0)
-            normal = self.calculate_normal(face)
-            face.vertex_normals = [normal, normal, normal]
-            self.faces.append(face)
+                # vertex position x y z
+                x = xy * math.cos(sector_angle)
+                y = xy * math.sin(sector_angle)
+                vec = Vector3(x, y, z)
+                self.vertices.append(vec)
 
-            # one point on first circle, two on second circle
-            face = Face3(base_v1, top_v1, top_v0)
-            normal = self.calculate_normal(face)
-            face.vertex_normals = [normal, normal, normal]
-            self.faces.append(face)
+                # normals
+                # length_inv = 1 / radius
+                # nx = x * length_inv
+                # ny = y * length_inv
+                # nz = z * length_inv
+                # normal = Vector3(nx, ny, nz)
+                # self.normals.append(normal)
 
-    def _build_polygon(self, radius, z, segments=32, reverse_vertex_order=False):
-        """
-        Generate a polygon given number of segments and radius
-        
-        :param radius:
-        :param z:
-        :param segments:
-        :param reverse_vertex_order:
-        :return:
-        """
-        vertex_start_index = len(self.vertices)
+                # tex coords (s, t) range between [0, 1]
+                # TODO: https://www.songho.ca/opengl/gl_sphere.html
 
-        for i in range(segments):
-            angle = (math.pi / 2) + (i  / segments) * 2 * math.pi
+        for i in range(stacks):
+            k_1 = i * (sectors)  # beginning of current stack
+            k_2 = k_1 + sectors  # beginning of next stack
 
-            x = radius * math.cos(angle)
-            y = radius * math.sin(angle)
+            for j in range(sectors):
+                # faces
+                #
+                # if i = 0:
+                #     face = Face3(0, k_2)
+                #
+                if i != 0:
+                    face = Face3(k_1, k_2, k_1 + 1)
+                    # normal = self.calculate_normal(face)
+                    # face.vertex_normals = [normal, normal, normal]
+                    self.faces.append(face)
 
-            vertex = Vector3(x, y, z)
-            self.vertices.append(vertex)
+                if i != (stacks - 1):
+                    face = Face3(k_1 + 1, k_2, k_2 + 1)
+                    # normal = self.calculate_normal(face)
+                    # face.vertex_normals = [normal, normal, normal]
+                    self.faces.append(face)
 
-            if i >= 2:
-                if reverse_vertex_order:
-                    face = Face3(vertex_start_index + i,
-                                 vertex_start_index + i-1,
-                                 vertex_start_index)
-                else:
-                    face = Face3(vertex_start_index,
-                                 vertex_start_index + i - 1,
-                                 vertex_start_index + i)
+                k_1 += 1
+                k_2 += 1
 
-                normal = self.calculate_normal(face)
-                face.vertex_normals = [normal, normal, normal]
-                self.faces.append(face)
+        for face in self.faces:
+            if face.a > len(self.vertices) \
+                    or face.b > len(self.vertices) \
+                    or face.c > len(self.vertices):
+                print(face)
+
+
+    # def _build_cylinder(self):
+    #     """
+    #     Generate faces between top and bottom faces
+    #     :return:
+    #     """
+    #     top_circle_vertex_start_index = len(self.vertices) // 2
+    #
+    #     for i in range(top_circle_vertex_start_index):
+    #         base_v0 = i
+    #         base_v1 = i + 1
+    #         top_v0 = i + top_circle_vertex_start_index
+    #         top_v1 = top_v0 + 1
+    #         if base_v1 == top_circle_vertex_start_index:
+    #             base_v1 = 0
+    #             top_v1 = top_circle_vertex_start_index
+    #
+    #         # two points on first circle, one on second circle
+    #         face = Face3(base_v0, base_v1, top_v0)
+    #         normal = self.calculate_normal(face)
+    #         face.vertex_normals = [normal, normal, normal]
+    #         self.faces.append(face)
+    #
+    #         # one point on first circle, two on second circle
+    #         face = Face3(base_v1, top_v1, top_v0)
+    #         normal = self.calculate_normal(face)
+    #         face.vertex_normals = [normal, normal, normal]
+    #         self.faces.append(face)
+    #
+    # def _build_polygon(self, radius, z, segments=32, reverse_vertex_order=False):
+    #     """
+    #     Generate a polygon given number of segments and radius
+    #
+    #     :param radius:
+    #     :param z:
+    #     :param segments:
+    #     :param reverse_vertex_order:
+    #     :return:
+    #     """
+    #     vertex_start_index = len(self.vertices)
+    #
+    #     for i in range(segments):
+    #         angle = (math.pi / 2) + (i  / segments) * 2 * math.pi
+    #
+    #         x = radius * math.cos(angle)
+    #         y = radius * math.sin(angle)
+    #
+    #         vertex = Vector3(x, y, z)
+    #         self.vertices.append(vertex)
+    #
+    #         if i >= 2:
+    #             if reverse_vertex_order:
+    #                 face = Face3(vertex_start_index + i,
+    #                              vertex_start_index + i-1,
+    #                              vertex_start_index)
+    #             else:
+    #                 face = Face3(vertex_start_index,
+    #                              vertex_start_index + i - 1,
+    #                              vertex_start_index + i)
+    #
+    #             normal = self.calculate_normal(face)
+    #             face.vertex_normals = [normal, normal, normal]
+    #             self.faces.append(face)
