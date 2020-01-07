@@ -44,6 +44,32 @@ class SphereGeometry(Geometry):
 
         self.build_sphere(radius, sectors, stacks)
 
+    def build_vertices_flat(self, radius, sectors, stacks):
+        sector_step = 2 * math.pi / sectors
+        stack_step = math.pi / stacks
+
+        # compute all vertices first, each vertex contains (x, y, z) except normal
+        for i in range(stacks):
+            stack_angle = (math.pi / 2) - (i * stack_step)  # range: pi/2 -> -pi/2
+            xy = radius * math.cos(stack_angle)             # r * cos(u)
+            z = radius * math.sin(stack_angle)              # r * sin(u)
+
+            # add (sectors + 1) vertices per stack
+            for j in range(sectors):
+                sector_angle = j * sector_step  # from 0 to 2pi
+
+                vec = Vector3(xy * math.cos(sector_angle),    # x = r * cos(u) * cos(v)
+                              xy * math.sin(sector_angle),    # y = r * cos(u) * sin(v)
+                              z)                              # z = r * sin(u)
+                self.vertices.append(vec)
+
+        index = 0
+        for i in range(stacks):
+            vi_1 = i * (sectors + 1)
+            vi_2 = (i + 1) * (sectors + 1)
+
+
+
     def build_sphere(self, radius, sectors, stacks):
 
         for i in range(stacks):
