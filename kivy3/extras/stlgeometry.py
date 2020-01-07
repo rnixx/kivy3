@@ -22,7 +22,6 @@ class STLGeometry(Geometry):
                             stl_mesh.vectors[i][j][2])
                 self.vertices.append(v)
 
-
             f_index = i * 3
             face3 = Face3(f_index, f_index + 1, f_index + 2)
             face3.normal = Vector3(stl_mesh.normals[i][0],

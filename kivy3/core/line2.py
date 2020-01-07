@@ -1,7 +1,7 @@
 """
 The MIT License (MIT)
 
-Copyright (c) 2013 Niko Skrypnik
+Copyright (c) 2019 Shaun Barlow
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,39 +21,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
-from kivy3 import Vector3
 
 """
-Geometry class
+Line2 class
 =============
 
+This class should store information about line. Should be used
+with some vertices information as it doesn't contain vertices itself,
+but only its indices
+
 """
 
+from kivy3 import Vector3, Geometry
 
-class Geometry(object):
 
-    def __init__(self, name=''):
-        self.name = name
-        self.faces = []
-        self.vertices = []
-        self.face_vertex_uvs = [[]]
-        self.lines = []
+class Line2(object):
 
-    def compute_vertex_normal(self):
-        pass
-
-    def calculate_normal(self, face):
-        """
-        Calculate and return the normal to the plane on a given face.
-        Normal points in direction according right-hand rule.
-        :param face:
-        :return:
-        """
-        vec_a = self.vertices[face.a]
-        vec_b = self.vertices[face.b]
-        vec_c = self.vertices[face.c]
-        b_minus_a = Vector3.sub_vectors(vec_b, vec_a)
-        c_minus_a = Vector3.sub_vectors(vec_c, vec_a)
-        b_minus_a.cross(c_minus_a)
-        normal = b_minus_a
-        return normal
+    def __init__(self, a, b, normal=None):
+        self.a = a
+        self.b = b
+        self.normal = normal or Vector3(0, 0, 0)  # face normal
+        self.vertex_normals = []  # vertices normals
