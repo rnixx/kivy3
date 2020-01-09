@@ -48,9 +48,8 @@ class Object3D(EventDispatcher):
     """
 
     def __init__(self, **kw):
-
-        super(Object3D, self).__init__(**kw)
         self.name = kw.pop('name', '')
+        super(Object3D, self).__init__(**kw)
         self.children = list()
         self.parent = None
 

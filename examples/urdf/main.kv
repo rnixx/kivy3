@@ -1,63 +1,13 @@
-
-
 <BaseBox>
+    control_box: control_box
+    renderer_box: renderer_box
     BoxLayout
+        id: renderer_box
+    BoxLayout
+        id: control_box
         size_hint_x: None
         width: 200
         orientation: 'vertical'
-
-        Label
-            text: 'A'
-        Slider
-            on_value: root.theta[0] = self.value
-            min: -45
-            max: 15
-        Label
-            text: 'B'
-        Slider
-            on_value: root.theta[1] = self.value
-        Label
-            text: 'C'
-        Slider
-            on_value: root.theta[2] = self.value
-        Label
-            text: 'D'
-        Slider
-            on_value: root.theta[3] = self.value
-        Label
-            text: 'E'
-        Slider
-            on_value: root.theta[4] = self.value
-        Label
-            text: 'F'
-        Slider
-            on_value: root.theta[5] = self.value
-        Label
-            text: 'G'
-        Slider
-            on_value: root.theta[6] = self.value
-
-
-        Label
-            text: 'LIGHT Position'
-        Slider
-            on_value: root.renderer.main_light.pos_x = self.value
-            min: -300
-            max: 300
-        Slider
-            on_value: root.renderer.main_light.pos_y = self.value
-            min: -300
-            max: 300
-        Slider
-            on_value:
-                root.renderer.main_light.pos_z = self.value
-            min: -300
-            max: 300
-        Slider
-            on_value: root.renderer.main_light.intensity = self.value
-            min: 1
-            max: 4000
-            value: 3000
 
 <Label>
     size_hint_y: None
@@ -68,3 +18,27 @@
     height: 25
     min: 0
     max: 360
+
+<JointControl>
+    orientation: 'vertical'
+    size_hint_x: None
+    width: 200
+    Label
+        text: root.name
+    BoxLayout
+        size_hint_y: None
+        height: 25
+        Slider
+            on_value: root.value = self.value
+            value: root.value
+            min: root.min
+            max: root.max
+        TextInput
+            size_hint_x: 0.4
+            text: '{:.2f}'.format(root.value)
+            on_focus: if not self.focus: root.value = float(self.text)
+            input_filter: 'float'
+            multiline: False
+            write_tab: False
+            padding: 5,4,0,0
+

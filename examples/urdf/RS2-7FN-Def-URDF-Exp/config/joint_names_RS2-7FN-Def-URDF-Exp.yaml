@@ -1,0 +1,1 @@
+controller_joint_names: ['', '1019-1013-joint', '1013-1015-joint', '1015-elbow-joint', '1015-to-wrist-joint', 'wrist-joint', 'gripper_joint', 'jaw_outside_joint', 'jaw_inside_joint', ]

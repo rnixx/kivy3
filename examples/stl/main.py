@@ -36,6 +36,8 @@ _this_path = os.path.dirname(os.path.realpath(__file__))
 # shader_file = os.path.join(_this_path, "./simple.glsl")
 # obj_file = os.path.join(_this_path, "./monkey.obj")
 
+stl_file = "D:/TheBlueprintLab/Projects/ReachControl/kivy3_repo/examples/urdf/RS2-1021-segmented-def-urdf/meshes/base_link.STL"
+
 
 class MainApp(App):
 
@@ -44,7 +46,7 @@ class MainApp(App):
         self.renderer = Renderer()
         scene = Scene()
         # load stl file
-        mesh_a = mesh.Mesh.from_file('./meshes/base_link.STL')
+        mesh_a = mesh.Mesh.from_file(stl_file)
         geo = STLGeometry(mesh_a)
         material = Material(color=(0., 0., 1.), diffuse=(0., 0., 0.1),
                             specular=(.1, .1, .1))

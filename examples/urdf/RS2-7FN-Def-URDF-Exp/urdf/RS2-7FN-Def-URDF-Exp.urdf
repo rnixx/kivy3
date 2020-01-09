@@ -1,0 +1,471 @@
+<?xml version="1.0"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="RS2-7FN-Def-URDF-Exp">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.000164826894098182 0.0162088898903413 -0.0310730946898569"
+        rpy="0 0 0" />
+      <mass
+        value="1.95256670190681" />
+      <inertia
+        ixx="0.0025845526417552"
+        ixy="2.74996036672486E-06"
+        ixz="3.46986433145239E-06"
+        iyy="0.00220577888425278"
+        iyz="8.7504619600549E-05"
+        izz="0.00332542133201934" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="1019-1013-link">
+    <inertial>
+      <origin
+        xyz="0.00846445483212577 -0.0244827539750618 -0.060442590142017"
+        rpy="0 0 0" />
+      <mass
+        value="2.0678746416529" />
+      <inertia
+        ixx="0.00330229113247758"
+        ixy="0.000296034537163315"
+        ixz="0.000245878650172201"
+        iyy="0.00216228624668431"
+        iyz="-0.000684380183759875"
+        izz="0.00283007800773073" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1019-1013-link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1019-1013-link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="1019-1013-joint"
+    type="continuous">
+    <origin
+      xyz="0 0.05445 0"
+      rpy="1.5707963267949 0.0258390165149759 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="1019-1013-link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="1013-1015-link">
+    <inertial>
+      <origin
+        xyz="-0.000900553172268328 -0.0373680074720055 0.150200282703083"
+        rpy="0 0 0" />
+      <mass
+        value="5.03116562956713" />
+      <inertia
+        ixx="0.0125948781169476"
+        ixy="0.000211995141552501"
+        ixz="-0.000505685577309012"
+        iyy="0.0114649582486799"
+        iyz="6.52225611773322E-05"
+        izz="0.00528976449626351" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1013-1015-link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1013-1015-link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="1013-1015-joint"
+    type="continuous">
+    <origin
+      xyz="0.000638149815500067 -0.0459955733175806 -0.0810500000000005"
+      rpy="0 0 0.0138732670974071" />
+    <parent
+      link="1019-1013-link" />
+    <child
+      link="1013-1015-link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="1015-elbow-link">
+    <inertial>
+      <origin
+        xyz="-0.00711789380788915 -0.0336425516963982 0.0443019867408018"
+        rpy="0 0 0" />
+      <mass
+        value="1.32885498073102" />
+      <inertia
+        ixx="0.00222902532912342"
+        ixy="0.00024399148847761"
+        ixz="-0.000382471310938442"
+        iyy="0.0019253215171964"
+        iyz="0.000467727454008622"
+        izz="0.00153704514501072" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1015-elbow-link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1015-elbow-link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="1015-elbow-joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.00519999999999937 0.290553825516047"
+      rpy="3.141592653589793 0 0" />
+    <parent
+      link="1013-1015-link" />
+    <child
+      link="1015-elbow-link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="1015-to-wrist-link">
+    <inertial>
+      <origin
+        xyz="-0.00719221871729809 0.0204450715361163 -0.0594818589608472"
+        rpy="0 0 0" />
+      <mass
+        value="1.43887470155011" />
+      <inertia
+        ixx="0.00188013181954729"
+        ixy="0.000153857689104543"
+        ixz="-0.000142683550970169"
+        iyy="0.00124925601189501"
+        iyz="0.000421297609297084"
+        izz="0.0015860060041461" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1015-to-wrist-link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/1015-to-wrist-link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="1015-to-wrist-joint"
+    type="continuous">
+    <origin
+      xyz="-0.000149999999999901 -0.0407999999999999 0.0804868346433256"
+      rpy="0 0 3.10225642180847" />
+    <parent
+      link="1015-elbow-link" />
+    <child
+      link="1015-to-wrist-link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="wrist-link">
+    <inertial>
+      <origin
+        xyz="-0.0075407 -0.03289 0.040272"
+        rpy="0 0 0" />
+      <mass
+        value="1.21" />
+      <inertia
+        ixx="0.0019217"
+        ixy="0.0002394"
+        ixz="-0.00033941"
+        iyy="0.0016188"
+        iyz="0.00043067"
+        izz="0.0014276" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/wrist-link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/wrist-link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wrist-joint"
+    type="continuous">
+    <origin
+      xyz="0 0.0408000000000001 -0.0784631653566745"
+      rpy="3.09778822172354 0 -3.14159265358979" />
+    <parent
+      link="1015-to-wrist-link" />
+    <child
+      link="wrist-link" />
+    <axis
+      xyz="-1 0 0" />
+  </joint>
+  <link
+    name="gripper_Link">
+    <inertial>
+      <origin
+        xyz="4.54346533854122E-06 -5.68667371086094E-06 0.0730141949600499"
+        rpy="0 0 0" />
+      <mass
+        value="1.50806816865306" />
+      <inertia
+        ixx="0.00127659411519893"
+        ixy="2.34034390034126E-10"
+        ixz="-6.1299845401978E-08"
+        iyy="0.00128628497030525"
+        iyz="1.1393914815792E-08"
+        izz="0.00105996163979503" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/gripper_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/gripper_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gripper_joint"
+    type="continuous">
+    <origin
+      xyz="-5E-05 -0.0408 0.066532"
+      rpy="0 0 0" />
+    <parent
+      link="wrist-link" />
+    <child
+      link="gripper_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="jaw_outside_Link">
+    <inertial>
+      <origin
+        xyz="-5.35134721466046E-08 -0.0169111108173385 -0.0527046244794716"
+        rpy="0 0 0" />
+      <mass
+        value="0.162219609910186" />
+      <inertia
+        ixx="0.000175262410849322"
+        ixy="-1.97894922121464E-10"
+        ixz="-2.44422920001455E-10"
+        iyy="0.000207264045549705"
+        iyz="-3.35887822600556E-05"
+        izz="6.41428226701829E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/jaw_outside_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0941176470588235 0.0941176470588235 0.0941176470588235 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/jaw_outside_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="jaw_outside_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.033 0.14059"
+      rpy="-0 0 -3.1416" />
+    <parent
+      link="gripper_Link" />
+    <child
+      link="jaw_outside_Link" />
+    <axis
+      xyz="-1 0 0" />
+  </joint>
+  <link
+    name="jaw_inside_link">
+    <inertial>
+      <origin
+        xyz="0.000499971361975354 -0.0168215276830385 -0.05213027367461"
+        rpy="0 0 0" />
+      <mass
+        value="0.151327237847462" />
+      <inertia
+        ixx="0.000173741820316011"
+        ixy="-3.85818316107868E-11"
+        ixz="1.7368198715776E-10"
+        iyy="0.000180460675926108"
+        iyz="-3.37839754325243E-05"
+        izz="3.8241494154127E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/jaw_inside_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0941176470588235 0.0941176470588235 0.0941176470588235 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://RS2-7FN-Def-URDF-Exp/meshes/jaw_inside_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="jaw_inside_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.0329999999999991 0.140587678585277"
+      rpy="-3.1338442526081107 0 0" />
+    <parent
+      link="gripper_Link" />
+    <child
+      link="jaw_inside_link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+</robot>
