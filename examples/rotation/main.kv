@@ -1,0 +1,64 @@
+<Controls>
+    orientation: 'vertical'
+    size_hint: None, None
+    size: 100, 300
+    pos:
+    x_rot: 0
+    y_rot: 0
+    z_rot: 0
+    x_trans: 0
+    y_trans: 0
+    z_trans: 0
+
+    Label
+        text: 'x rot'
+    TextInput
+        on_focus: if not self.focus: root.x_rot = float(self.text)
+        input_filter: 'float'
+        text: '0'
+        write_tab: False
+        multiline: False
+
+    Label
+        text: 'y rot'
+    TextInput
+        on_focus: if not self.focus: root.y_rot = float(self.text)
+        input_filter: 'float'
+        text: '0'
+        write_tab: False
+        multiline: False
+
+    Label
+        text: 'z rot'
+    TextInput
+        on_focus: if not self.focus: root.z_rot = float(self.text)
+        input_filter: 'float'
+        text: '0'
+        write_tab: False
+        multiline: False
+    Label
+        text: 'x trans'
+    TextInput
+        on_focus: if not self.focus: root.x_trans = float(self.text)
+        input_filter: 'float'
+        text: '0'
+        write_tab: False
+        multiline: False
+
+    Label
+        text: 'y trans'
+    TextInput
+        on_focus: if not self.focus: root.y_trans = float(self.text)
+        input_filter: 'float'
+        text: '0'
+        write_tab: False
+        multiline: False
+
+    Label
+        text: 'z trans'
+    TextInput
+        on_focus: if not self.focus: root.z_trans = float(self.text)
+        input_filter: 'float'
+        text: '0'
+        write_tab: False
+        multiline: False
