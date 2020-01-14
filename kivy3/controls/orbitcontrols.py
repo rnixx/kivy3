@@ -51,16 +51,22 @@ class OrbitControls(BoxLayout):
                 pass
 
     def do_translate(self, touch):
-        scale = 0.001
-        x = self.look_at_pos[0] # + (touch.dx * scale)
-        y = self.look_at_pos[1] - (touch.dy * scale)
-        z = self.look_at_pos[2]
+        scale = 0.005
+        x = self.look_at_pos[0] \
+            + (touch.dy * scale * math.sin(math.radians(self.theta))) \
+            - (touch.dx * scale * math.cos(math.radians(self.theta)))
+        y = self.look_at_pos[1]  # - (touch.dy * scale)
+        z = self.look_at_pos[2] \
+            + (touch.dy * scale * math.cos(math.radians(self.theta))) \
+            + (touch.dx * scale * math.sin(math.radians(self.theta)))
         self.look_at_pos = (x, y, z)
         self.camera.look_at(self.look_at_pos)
+        self.update_after_scroll()
 
     def do_rotate(self, touch):
         d_phi, d_theta = self.define_rotate_angle(touch)
-        self.phi += d_phi
+        if 0 < self.phi + d_phi < 180:
+            self.phi += d_phi
         self.theta += d_theta
 
         _phi = math.radians(self.phi)
