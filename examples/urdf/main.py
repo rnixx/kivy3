@@ -12,6 +12,8 @@ from urdf_parser_py.urdf import URDF
 from stl import mesh
 
 # Resources paths
+from kivy3.objects.stlmesh import STLMesh
+
 _this_path = os.path.dirname(os.path.realpath(__file__))
 shader_file = os.path.join(_this_path, "./blinnphong.glsl")
 
@@ -66,7 +68,7 @@ class MainApp(App):
             filename = filename.replace('package:/', '.')
             print(filename)
             stl = mesh.Mesh.from_file(filename)
-            geo = STLGeometry(stl)
+            # geo = STLGeometry(stl)
 
             # if len(geo.vertices) == 0:
             #     geo = BoxGeometry(0.1, 0.1, 0.1)
@@ -76,12 +78,7 @@ class MainApp(App):
                                 specular=(.01, .01, .01),
                                 shininess=4)
 
-            try:
-                obj = Mesh(geo, material, name=link.name)
-            except Exception as e:
-                print(e)
-                geo = BoxGeometry(0.1, 0.1, 0.1)
-                obj = Mesh(geo, material, name=link.name)
+            obj = STLMesh(stl, material, name=link.name)
 
             # store in dictionary
             link_dict[link.name] = obj
