@@ -173,7 +173,8 @@ class BaseVector(list):
         return res
 
     def normalize(self):
-        return self / self.length()
+        self[:] = [x/self.length() for x in self]
+        return self
 
     def lerp(self, v, alpha):
         for i in self._indeces:
@@ -240,6 +241,7 @@ class Vector3(BaseVector):
     @classmethod
     def cross_vectors(cls):
         pass
+
 
 
 class Vector2(BaseVector):
