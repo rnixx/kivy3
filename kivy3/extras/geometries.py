@@ -26,6 +26,7 @@ from kivy3.core.geometry import Geometry
 from kivy3.core.face3 import Face3
 
 import math
+import numpy as np
 
 
 def normalise_v3(vector):
@@ -245,3 +246,89 @@ class SphereGeometry(Geometry):
             self.faces.append(face3)
 
         self.vertices = _vertices
+
+class PlaneGeometry(Geometry):
+    def __init__(self, width, length, texture=None, seg_width=2, seg_length=2,axis="xy", **kw):
+        name = kw.pop('name', '')
+        super(PlaneGeometry, self).__init__(name)
+        self.texture = texture
+        self.w = float(width)
+        self.l = float(length)
+        self.seg_width = seg_width
+        self.seg_length = seg_length
+        self.axis=axis
+        self._build_plane()
+
+
+    def _build_plane(self):
+
+        _vertices = []
+        _texture_uvs = []
+        _faces = []
+        # if self.texture is not None:
+        #     px_width = self.texture.size[0]
+        #     px_length = self.texture.size[1]
+        #
+        #     idx = 0
+        #     for x in np.linspace(0,self.w, num=self.seg_width):
+        #         for y in np.linspace(0,self.l, num = self.seg_length):
+        #             _vertices.append((x,y,0))
+        #             px_loc = (x/float(self.w))
+        #             py_loc = (y/float(self.l))
+        #             _texture_uvs.append((px_loc, py_loc))
+        #             if y == self.l or x == self.w:
+        #                 # print("At the last row/col")
+        #                 pass
+        #             else:
+        #                 # print(y)
+        #                 _faces.append((idx, idx+1, idx+self.seg_width))
+        #                 _faces.append((idx+1, idx+self.seg_width, idx+self.seg_width+1))
+        #             idx+=1
+        #     self.vertices = _vertices
+
+
+
+        #else:
+        _vertices = [(-0.5, -0.5, 0.),
+                     (0.5, -0.5, 0.),
+                     (-0.5, 0.5, 0.),
+                     (0.5, 0.5, 0.)]
+
+        _faces = [(0, 1, 2), (1, 2, 3)]
+
+        _texture_uvs = [(0.,0.), (1.,0.), (0.,1.), (1.,1.)]
+
+        for v in _vertices:
+            if self.axis == "xy":
+                v = Vector3(0.5 * v[0] * self.w,
+                            0.5 * v[1] * self.l,
+                            0)
+            elif self.axis== "xz":
+                v = Vector3(0.5 * v[0] * self.w,
+                            0,
+                            0.5 * v[1] * self.l)
+            elif  self.axis=="yz":
+                v = Vector3(0,
+                            0.5 * v[0] * self.w,
+                            0.5 * v[1] * self.l)
+            self.vertices.append(v)
+
+
+        for f in _faces:
+            face3 = Face3(*f)
+            normal = (0., 0., 1.)
+            face3.vertex_normals = [normal, normal, normal]
+            self.faces.append(face3)
+            if self.texture is not None:
+                for i in f:
+                    self.face_vertex_uvs[0].append(_texture_uvs[i])
+
+        # for f in _faces:
+        #     face3 = Face3(*f)
+        #     normal = (0, 0, -1)
+        #     face3.vertex_normals = [normal, normal, normal]
+        #
+        #     self.faces.append(face3)
+        #     if self.texture is not None:
+        #         for i in f:
+        #             self.face_vertex_uvs[0].append(_texture_uvs[i])

@@ -38,9 +38,9 @@ from kivy.graphics import (
 )
 from kivy.graphics.instructions import InstructionGroup
 from kivy.event import EventDispatcher
-
 from kivy3.math.vectors import Vector3
-
+import numpy as np
+import math
 
 class Object3D(EventDispatcher):
     """Base class for all 3D objects in rendered
@@ -49,10 +49,12 @@ class Object3D(EventDispatcher):
 
     def __init__(self, **kw):
 
-        super(Object3D, self).__init__(**kw)
+        super(Object3D, self).__init__()
         self.name = kw.pop('name', '')
         self.children = list()
         self.parent = None
+
+        self._mat_instruction = None
 
         self._scale = Scale(1., 1., 1.)
         self._position = Vector3(0, 0, 0)
@@ -127,6 +129,48 @@ class Object3D(EventDispatcher):
     def on_angle_change(self, axis, angle):
         self._rotors[axis].angle = angle
 
+    def get_global_coordinate(self, offset=[0,0,0]):
+        # Return the global coordinate relative to the root object.
+        g_c = offset
+        current_object = self
+        while current_object is not None:
+            # print(current_object.name, self.pos, g_c)
+            # Rotate.
+            a = math.radians(current_object.rot[0])
+            b = math.radians(current_object.rot[1])
+            c = math.radians(current_object.rot[2])
+            rx = np.array([[1, 0, 0],
+                          [0, math.cos(a), -math.sin(a)],
+                          [0, math.sin(a), math.cos(a)]])
+            ry = np.array([[math.cos(b), 0, math.sin(b)],
+                          [0, 1, 0],
+                          [-math.sin(b), 0, math.cos(b)]])
+
+            rz = np.array([[math.cos(c), -math.sin(c), 0],
+                          [math.sin(c), math.cos(c), 0],
+                          [0, 0, 1]])
+            g_c = rx.dot(g_c)
+            g_c = ry.dot(g_c)
+            g_c = rz.dot(g_c)
+
+            #Calculate transform
+            # g_c = Vector3(g_c[0],g_c[1],g_c[2])
+
+            g_c[0] += current_object.pos[0]
+            g_c[1] += current_object.pos[1]
+            g_c[2] += current_object.pos[2]
+            current_object = current_object.parent
+        return g_c
+
+    def set_material(self, mat):
+        idx = 0
+        for instr in self._instructions.children:
+            if instr.__class__.__name__ == "Material":
+                self._instructions.children[idx] = mat
+                return
+            idx +=1
+
+
     def as_instructions(self):
         """ Get instructions set for renderer """
         if not self._instructions.children:
@@ -137,7 +181,10 @@ class Object3D(EventDispatcher):
                 self._instructions.add(rot)
             self._instructions.add(UpdateNormalMatrix())
             for instr in self.custom_instructions():
+
                 self._instructions.add(instr)
+
+
             for child in self.get_children_instructions():
                 self._instructions.add(child)
             self._instructions.add(self._pop_matrix)

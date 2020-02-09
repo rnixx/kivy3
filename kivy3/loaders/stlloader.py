@@ -22,22 +22,22 @@ class STLMesh(Object3D):
         self.vertex_format = kw.pop('vertex_format', DEFAULT_VERTEX_FORMAT)
         self.mesh_mode = kw.pop('mesh_mode', DEFAULT_MESH_MODE)
         self.material = material
-        self.v0 = v0
-        self.v1 = v1
-        self.v2 = v2
         self.normals = normals
-        indices = list(range(0,len(self.v0)*3))
-        uvs = np.zeros((len(self.v0), 2)).astype(np.float32)
-        vertices = np.block([self.v0,self.normals,uvs,self.v1,self.normals,uvs,self.v2,self.normals,uvs]).flatten()
-
-        kw=dict(vertices=vertices,
+        indices = list(range(0, len(v0)*3))
+        uvs = np.zeros((len(v0), 2)).astype(np.float32)
+        vertices = list(np.block([v0.astype(np.float32),normals.astype(np.float32),uvs,v1.astype(np.float32),normals.astype(np.float32),uvs,v2.astype(np.float32),normals.astype(np.float32),uvs]).flatten())
+        kw2=dict(vertices=vertices,
                 indices=indices,
                 fmt=self.vertex_format,
                 mode=self.mesh_mode)
 
-        if self.material.map:
-            kw['texture'] = self.material.map
-        self._mesh = KivyMesh(**kw)
+        # if self.material.map:
+        #     kw2['texture'] = self.material.map
+        self._mesh = KivyMesh(**kw2)
+
+    def custom_instructions(self):
+        yield self.material
+        yield self._mesh
 
 
 class STLObject(Object3D):
@@ -61,51 +61,24 @@ class STLObject(Object3D):
             if (len(self.stl_mesh.v0)-start) >= max_faces:
                 print("Faces are more than max")
                 length = max_faces
-                #
-                # mesh = STLMesh(self.stl_mesh.v0[start:start+length], self.stl_mesh.v1[start:start+length], self.stl_mesh.v2[start:start+length], self.stl_mesh.normals[start:start+length],
-                # self.material)
-                #
-                # self.add(mesh)
-                _vertices = np.concatenate((self.stl_mesh.v0[start:start+length],self.stl_mesh.v1[start:start+length],self.stl_mesh.v2[start:start+length]))
-                for i in range(length):
 
-                    f3 = Face3(i,i+length, i+ length*2)
-                    f3.vertex_normals = [self.stl_mesh.normals[start+i],self.stl_mesh.normals[start+i],self.stl_mesh.normals[start+i]]
-                    _faces.append(f3)
-
-
-
-                geo = Geometry()
-                geo.vertices = _vertices
-                geo.faces = _faces
-                mesh = Mesh(geo, self.material)
+                mesh = STLMesh(self.stl_mesh.v0[start:start+length], self.stl_mesh.v1[start:start+length], self.stl_mesh.v2[start:start+length], self.stl_mesh.normals[start:start+length],
+                self.material)
                 self.add(mesh)
                 start = start+length
 
-
             else:
-                length = len(self.stl_mesh.v0)-start
-                _vertices = np.concatenate((self.stl_mesh.v0[start:],self.stl_mesh.v1[start:],self.stl_mesh.v2[start:]))
-                for i in range(length):
-                    f3 = Face3(i,i+length, i+ length*2)
-                    f3.vertex_normals = [self.stl_mesh.normals[i+start],self.stl_mesh.normals[i+start],self.stl_mesh.normals[i+start]]
-                    _faces.append(f3)
-                geo = Geometry()
-                geo.vertices = _vertices
-                geo.faces = _faces
-                #geometries.append(geo)
-                mesh = Mesh(geo, self.material)
-                self.add(mesh)
+                mesh = STLMesh(self.stl_mesh.v0[start:], self.stl_mesh.v1[start:], self.stl_mesh.v2[start:], self.stl_mesh.normals[start:],
+                self.material)
 
-                # length = max_faces
-                #
-                # mesh = STLMesh(self.stl_mesh.v0[start:], self.stl_mesh.v1[start:], self.stl_mesh.v2[start:], self.stl_mesh.normals[start:],
-                # self.material)
-                #
-                # self.add(mesh)
+                self.add(mesh)
                 break
 
         return self
+
+    def custom_instructions(self):
+        yield self.material
+        #yield self._mesh
 
 
 

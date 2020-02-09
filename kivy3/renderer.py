@@ -99,6 +99,7 @@ class Renderer(Widget):
         self.camera = camera
         self.camera.bind_to(self)
         self._instructions.add(scene.as_instructions())
+        self._update_matrices()
         Clock.schedule_once(self._update_matrices, -1)
 
     def on_size(self, instance, value):
