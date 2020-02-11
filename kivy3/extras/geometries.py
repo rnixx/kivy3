@@ -49,8 +49,8 @@ class BoxGeometry(Geometry):
                    (7, 4, 3), (5, 1, 2), (6, 5, 2)
                    ]
 
-    _cube_normals = [(0, 0, 1), (-1, 0, 0), (0, 0, -1),
-                     (1, 0, 0), (0, 1, 0), (0, -1, 0)
+    _cube_normals = [(0, 0, -1), (0, -1, 0), (0, 0, 1),
+                     (0, 1, 0), (-1, 0, 0), (1, 0, 0)
                      ]
 
     def __init__(self, width, height, depth, **kw):
@@ -265,30 +265,7 @@ class PlaneGeometry(Geometry):
         _vertices = []
         _texture_uvs = []
         _faces = []
-        # if self.texture is not None:
-        #     px_width = self.texture.size[0]
-        #     px_length = self.texture.size[1]
-        #
-        #     idx = 0
-        #     for x in np.linspace(0,self.w, num=self.seg_width):
-        #         for y in np.linspace(0,self.l, num = self.seg_length):
-        #             _vertices.append((x,y,0))
-        #             px_loc = (x/float(self.w))
-        #             py_loc = (y/float(self.l))
-        #             _texture_uvs.append((px_loc, py_loc))
-        #             if y == self.l or x == self.w:
-        #                 # print("At the last row/col")
-        #                 pass
-        #             else:
-        #                 # print(y)
-        #                 _faces.append((idx, idx+1, idx+self.seg_width))
-        #                 _faces.append((idx+1, idx+self.seg_width, idx+self.seg_width+1))
-        #             idx+=1
-        #     self.vertices = _vertices
 
-
-
-        #else:
         _vertices = [(-0.5, -0.5, 0.),
                      (0.5, -0.5, 0.),
                      (-0.5, 0.5, 0.),
@@ -323,12 +300,50 @@ class PlaneGeometry(Geometry):
                 for i in f:
                     self.face_vertex_uvs[0].append(_texture_uvs[i])
 
-        # for f in _faces:
-        #     face3 = Face3(*f)
-        #     normal = (0, 0, -1)
-        #     face3.vertex_normals = [normal, normal, normal]
-        #
-        #     self.faces.append(face3)
-        #     if self.texture is not None:
-        #         for i in f:
-        #             self.face_vertex_uvs[0].append(_texture_uvs[i])
+class ConeGeometry(Geometry):
+    def __init__(self, radius, length, **kw):
+        name = kw.pop('name', '')
+        super(ConeGeometry, self).__init__(name)
+        self.circle_segment = kw.pop('circle_segment', 16)
+
+        self.rad = radius
+        self.length = length
+
+        self._build_cone()
+
+    def _build_cone(self):
+        _vertices = []
+        _vertex_normals = []
+        top_vertex = (0,0,self.length)
+        _vertices.append(top_vertex)
+        _vertex_normals.append((0,0,1))
+
+        for i in range(self.circle_segment):
+            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
+            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
+            _vertex_normals.append((x/self.rad, y/self.rad, 0))
+            _vertices.append((x,y,0))
+
+        for f in range(2,self.circle_segment):
+            # Bottom circle
+            normal = Vector3(0,0,-1)
+            face = (1,f,f+1)
+            face3 = Face3(*face)
+            face3.vertex_normals=[normal,normal,normal]
+            self.faces.append(face3)
+
+        for f in range(1,self.circle_segment+1):
+            # trialngle corners
+            normal = Vector3(0,0,-1)
+            if (f+1 == self.circle_segment +1):
+                face = (0,f,1)
+                face3 = Face3(*face)
+                face3.vertex_normals=[_vertex_normals[0],_vertex_normals[f],_vertex_normals[1]]
+            else:
+                face = (0,f,f+1)
+                face3 = Face3(*face)
+                face3.vertex_normals=[_vertex_normals[0],_vertex_normals[f],_vertex_normals[f+1]]
+
+            self.faces.append(face3)
+
+        self.vertices = _vertices

@@ -73,7 +73,7 @@ class Renderer(Widget):
         self.texture = self.fbo.texture
         self.camera = None
         self.scene = None
-        self.main_light = Light(renderer=self)
+        self.main_light = Light(renderer=self, pos=(0, 1, 0))
 
     def _config_fbo(self):
         # set shader file here

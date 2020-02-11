@@ -39,6 +39,21 @@ class STLMesh(Object3D):
         yield self.material
         yield self._mesh
 
+    def set_material(self, mat):
+        idx = 0
+        for instr in self._instructions.children:
+            if instr.__class__.__name__ == "Material":
+                self._instructions.children[idx] = mat
+                return
+            idx += 1
+
+    def get_material(self):
+        idx = 0
+        for instr in self._instructions.children:
+            if instr.__class__.__name__ == "Material":
+                return self._instructions.children[idx]
+            idx += 1
+
 
 class STLObject(Object3D):
     def __init__(self, stl_mesh, material, **kw):
@@ -46,6 +61,8 @@ class STLObject(Object3D):
         self.stl_mesh = stl_mesh
         self.material = material
         self.mtl = self.material  # shortcut for material property
+
+        self.meshes = []
 
         self.create_mesh()
 
@@ -66,19 +83,25 @@ class STLObject(Object3D):
                 self.material)
                 self.add(mesh)
                 start = start+length
+                self.meshes.append(mesh)
 
             else:
                 mesh = STLMesh(self.stl_mesh.v0[start:], self.stl_mesh.v1[start:], self.stl_mesh.v2[start:], self.stl_mesh.normals[start:],
                 self.material)
 
                 self.add(mesh)
+                self.meshes.append(mesh)
                 break
 
         return self
 
-    def custom_instructions(self):
-        yield self.material
+    # def custom_instructions(self):
+        #yield self.material
         #yield self._mesh
+
+    def set_material(self,mat):
+        for stl_mesh in self.meshes:
+            stl_mesh.set_material(mat)
 
 
 

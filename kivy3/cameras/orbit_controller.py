@@ -10,13 +10,18 @@ class OrbitControl(Widget):
         self.target = [0., 0., 0.]
         self.phi = 0.
         self.theta = 0.
+        self.activated = False
+        self.light = renderer.main_light
 
         self.update_cam()
         pass
 
     def on_touch_down(self, touch):
         # print("Touch Down", touch)
-        pass
+        if 'button' in touch.profile:
+            if touch.button == 'left' or touch.button == 'right':
+                touch.grab(self)
+                self.activated = True
 
     def on_touch_up(self, touch):
         # print("Touch Up", touch)
@@ -27,11 +32,15 @@ class OrbitControl(Widget):
             if touch.button == 'scrolldown':
                 self.radius *= 0.9
                 self.update_cam()
+            if touch.button == 'left' or touch.button == 'right':
+                touch.ungrab(self)
+                self.activated = False
+
         pass
 
     def on_touch_move(self, touch):
         # print("Touch Move", touch)
-        if 'button' in touch.profile:
+        if 'button' in touch.profile and self.activated:
             if touch.button == "left":
                 self.theta += 0.02 * float(touch.dx)
                 self.phi -= 0.02 * float(touch.dy)
@@ -64,4 +73,8 @@ class OrbitControl(Widget):
                                          + self.target[2]
         self.camera.pos[1] = self.radius * math.sin(self.phi) + self.target[1]
         self.camera.look_at(self.target[0], self.target[1], self.target[2])
+
+        # self.light.pos_x = -self.camera.pos[0]
+        # self.light.pos_y = -self.camera.pos[1]
+        # self.light.pos_z = -self.camera.pos[2]
         return

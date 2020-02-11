@@ -163,12 +163,11 @@ class Object3D(EventDispatcher):
         return g_c
 
     def set_material(self, mat):
-        idx = 0
-        for instr in self._instructions.children:
-            if instr.__class__.__name__ == "Material":
-                self._instructions.children[idx] = mat
-                return
-            idx +=1
+        #Override function to change the material of an object
+        pass
+
+    def get_material(self,mat):
+        pass
 
 
     def as_instructions(self):

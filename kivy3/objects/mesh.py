@@ -43,6 +43,7 @@ class Mesh(Object3D):
         self.mtl = self.material  # shortcut for material property
         self.vertex_format = kw.pop('vertex_format', DEFAULT_VERTEX_FORMAT)
         self.mesh_mode = kw.pop('mesh_mode', DEFAULT_MESH_MODE)
+        self.swap_xz = kw.pop('swap_xz', False)
         self.create_mesh()
 
     def create_mesh(self):
@@ -54,9 +55,13 @@ class Mesh(Object3D):
             for i, k in enumerate(['a', 'b', 'c']):
                 v_idx = getattr(face, k)
                 vertex = self.geometry.vertices[v_idx]
+                if self.swap_xz:
+                    vertex = (vertex[2], vertex[1], vertex[0])
                 vertices.extend(vertex)
                 try:
                     normal = face.vertex_normals[i]
+                    if self.swap_xz:
+                        normal = (normal[2], normal[1], normal[0])
                 except IndexError:
                     normal = Vector3([0, 0, 0])
                 vertices.extend(normal)
