@@ -42,26 +42,22 @@ class OrbitControl(Widget):
         # print("Touch Move", touch)
         if 'button' in touch.profile and self.activated:
             if touch.button == "left":
-                self.theta += 0.01 * float(touch.dx)
-                self.phi -= 0.01 * float(touch.dy)
+                self.theta += 0.02 * float(touch.dx)
+                self.phi -= 0.02 * float(touch.dy)
                 self.phi = min([self.phi, math.pi/2])
                 self.phi = max([self.phi, -math.pi/2])
                 self.update_cam()
             if touch.button == "right":
-                #x
                 self.target[0] += 0.001 * (float(touch.dy)
-                                           * math.cos(self.theta) * math.sin(self.phi)
+                                           * math.cos(self.theta)
                                            - float(touch.dx)
                                            * math.sin(self.theta)) \
                                         * self.radius
-                # y
                 self.target[2] += 0.001 * (float(touch.dx)
                                            * math.cos(self.theta)
                                            + float(touch.dy)
-                                           * math.sin(self.theta) * math.sin(self.phi)) \
+                                           * math.sin(self.theta)) \
                                         * self.radius
-                # z
-                self.target[1] += 0.001 * -float(touch.dy) * math.cos(self.phi) * self.radius
                 self.update_cam()
 
     def update_cam(self):

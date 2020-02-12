@@ -82,6 +82,8 @@ class BoxGeometry(Geometry):
             n_idx += 1
             self.faces.append(face3)
 
+        self.bounding_vertices = self.vertices
+
 class CylinderGeometry(Geometry):
     def __init__(self, radius, length, **kw):
         name = kw.pop('name', '')
@@ -157,7 +159,7 @@ class CylinderGeometry(Geometry):
 
 
         self.vertices = _cylinder_vertices
-
+        self.bounding_vertices = self.vertices
 
 class SphereGeometry(Geometry):
 
@@ -347,3 +349,5 @@ class ConeGeometry(Geometry):
             self.faces.append(face3)
 
         self.vertices = _vertices
+
+        self.bounding_vertices = self.vertices

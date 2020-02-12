@@ -23,11 +23,12 @@ class ArrowObject(Object3D):
 class AxisObject(Object3D):
     #Red is X, Green is Y Blue is Z
     def __init__(self, **kw):
-        length=kw.pop('length', 0.3)
+        length=kw.pop('length', 0.1)
+        alpha=kw.pop('alpha', 1)
         super(AxisObject, self).__init__(**kw)
-        red_mat = Material(color=(1,0,0), diffuse=(1,0,0), specular=(0.3,0.3,0.3))
-        green_mat = Material(color=(0,1,0), diffuse=(0,1,0), specular=(0.3,0.3,0.3))
-        blue_mat = Material(color=(0,0,1), diffuse=(0,0,1), specular=(0.3,0.3,0.3))
+        red_mat = Material(color=(1,0,0), diffuse=(1,0,0), specular=(0.3,0.3,0.3), transparency=alpha)
+        green_mat = Material(color=(0,1,0), diffuse=(0,1,0), specular=(0.3,0.3,0.3), transparency=alpha)
+        blue_mat = Material(color=(0,0,1), diffuse=(0,0,1), specular=(0.3,0.3,0.3), transparency=alpha)
         x_axis = ArrowObject(red_mat, length=length)
         y_axis = ArrowObject(green_mat, length=length)
         z_axis = ArrowObject(blue_mat, length=length)

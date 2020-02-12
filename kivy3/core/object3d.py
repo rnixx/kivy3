@@ -41,6 +41,7 @@ from kivy.event import EventDispatcher
 from kivy3.math.vectors import Vector3
 import numpy as np
 import math
+from scipy.spatial.transform import Rotation as R
 
 class Object3D(EventDispatcher):
     """Base class for all 3D objects in rendered
@@ -73,6 +74,31 @@ class Object3D(EventDispatcher):
         }
 
         self._instructions = InstructionGroup()
+
+        #Vertices Object contating an approximate bound box of the object.
+        self.bounding_vertices = []
+
+
+    def add_object(self, *objs):
+        #Add object after rendering has begun
+        for obj in objs:
+            self._add_child(obj)
+            self._instructions.add(self._push_matrix)
+            self._instructions.add(self._translate)
+            self._instructions.add(self.scale)
+            for rot in self._rotors.values():
+                self._instructions.add(rot)
+            self._instructions.add(obj.as_instructions())
+            self._instructions.add(self._pop_matrix)
+
+
+    def remove_object(self, object):
+        instr = object.as_instructions()
+        if instr in self._instructions.children:
+            self._instructions.remove(instr)
+        else:
+            print("Object not found")
+        pass
 
     def add(self, *objs):
         for obj in objs:
@@ -128,6 +154,54 @@ class Object3D(EventDispatcher):
 
     def on_angle_change(self, axis, angle):
         self._rotors[axis].angle = angle
+
+
+    # def get_forward_kinematics(self, offset_xyz=(0,0,0), offset_rpy=(0,0,0), base= None):
+    #     pass
+
+    def calculate_forward_kinematics(self, offset_xyz=[0,0,0], offset_ypr=[0,0,0], base=None):
+        # Return [[xyz],[rpy]]
+        xyz = offset_xyz
+        offset_ypr= [offset_ypr[2],offset_ypr[1],offset_ypr[0]]
+        ypr = R.from_euler('zyx', offset_ypr, degrees=True)
+        current_object = self
+        while current_object is not base:
+            # print(current_object.name, self.pos, g_c)
+            # Rotate.
+            a = math.radians(current_object.rot[0])
+            b = math.radians(current_object.rot[1])
+            c = math.radians(current_object.rot[2])
+            rx = np.array([[1, 0, 0],
+                          [0, math.cos(a), -math.sin(a)],
+                          [0, math.sin(a), math.cos(a)]])
+            ry = np.array([[math.cos(b), 0, math.sin(b)],
+                          [0, 1, 0],
+                          [-math.sin(b), 0, math.cos(b)]])
+
+            rz = np.array([[math.cos(c), -math.sin(c), 0],
+                          [math.sin(c), math.cos(c), 0],
+                          [0, 0, 1]])
+            xyz = rx.dot(xyz)
+            xyz = ry.dot(xyz)
+            xyz = rz.dot(xyz)
+
+            #Calculate transform
+            # g_c = Vector3(g_c[0],g_c[1],g_c[2])
+            cur_rot = [current_object.rot[2],current_object.rot[1],current_object.rot[0]]
+            current_ypr = R.from_euler('zyx', cur_rot, degrees=True)
+
+            ypr = current_ypr*ypr
+
+            rpy=ypr.as_euler("zyx", degrees=True)
+            rpy = [rpy[2],rpy[1],rpy[0]]
+
+            xyz[0] += current_object.pos[0]
+            xyz[1] += current_object.pos[1]
+            xyz[2] += current_object.pos[2]
+            current_object = current_object.parent
+
+        return [xyz,rpy]
+
 
     def get_global_coordinate(self, offset=[0,0,0]):
         # Return the global coordinate relative to the root object.

@@ -63,6 +63,8 @@ class Camera(Object3D):
         self._look_at = None
         self.look_at(Vector3(0, 0, -1))
 
+        
+
     def _set_position(self, val):
         super(Camera, self).on_pos_changed(val)
         self.look_at(self._look_at)

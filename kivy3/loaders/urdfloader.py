@@ -137,7 +137,7 @@ class URDFObject(Object3D):
 
         self.add(self.link_dict[base_link])
         #This ofset changes z up to the opengl y up.
-        self.link_dict[base_link].rot.x = -90
+        # self.link_dict[base_link].rot.x = -90
 
     def create_link_objects(self):
         for link in self.urdf.links:
