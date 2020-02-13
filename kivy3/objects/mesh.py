@@ -45,6 +45,7 @@ class Mesh(Object3D):
         self.mesh_mode = kw.pop('mesh_mode', DEFAULT_MESH_MODE)
         self.swap_xz = kw.pop('swap_xz', False)
         self.create_mesh()
+        self.bounding_vertices = geometry.bounding_vertices
 
     def create_mesh(self):
         """ Create real mesh object from the geometry and material """

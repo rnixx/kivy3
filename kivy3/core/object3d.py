@@ -38,10 +38,14 @@ from kivy.graphics import (
 )
 from kivy.graphics.instructions import InstructionGroup
 from kivy.event import EventDispatcher
+from kivy.uix.relativelayout import RelativeLayout
 from kivy3.math.vectors import Vector3
 import numpy as np
 import math
 from scipy.spatial.transform import Rotation as R
+
+
+
 
 class Object3D(EventDispatcher):
     """Base class for all 3D objects in rendered
@@ -159,10 +163,10 @@ class Object3D(EventDispatcher):
     # def get_forward_kinematics(self, offset_xyz=(0,0,0), offset_rpy=(0,0,0), base= None):
     #     pass
 
-    def calculate_forward_kinematics(self, offset_xyz=[0,0,0], offset_ypr=[0,0,0], base=None):
+    def calculate_forward_kinematics(self, offset_xyz=[0,0,0], offset_rpy=[0,0,0], base=None):
         # Return [[xyz],[rpy]]
         xyz = offset_xyz
-        offset_ypr= [offset_ypr[2],offset_ypr[1],offset_ypr[0]]
+        offset_ypr= [offset_rpy[2],offset_rpy[1],offset_rpy[0]]
         ypr = R.from_euler('zyx', offset_ypr, degrees=True)
         current_object = self
         while current_object is not base:

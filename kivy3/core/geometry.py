@@ -36,6 +36,7 @@ class Geometry(object):
         self.faces = []
         self.vertices = []
         self.face_vertex_uvs = [[]]
+        self.bounding_vertices = []
 
     def compute_vertex_normal(self):
         pass

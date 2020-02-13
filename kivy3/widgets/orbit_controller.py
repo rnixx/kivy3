@@ -2,16 +2,19 @@ import math
 from kivy.uix.widget import Widget
 
 
-class OrbitControl(Widget):
+class OrbitControlWidget(Widget):
     def __init__(self, renderer, radius, **kw):
-        super(OrbitControl, self).__init__(**kw)
+        super(OrbitControlWidget, self).__init__()
         self.camera = renderer.camera
+        self.renderer = renderer
         self.radius = radius
         self.target = [0., 0., 0.]
         self.phi = 0.
         self.theta = 0.
         self.activated = False
         self.light = renderer.main_light
+
+
 
         self.update_cam()
         pass
