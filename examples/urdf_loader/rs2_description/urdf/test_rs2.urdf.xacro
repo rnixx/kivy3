@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot name="rs2" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find rs2_description)/urdf/rs2_collision.urdf.xacro" />
+
+  <link name="base_link" />
+  <rs2 parent="base_link" name="rs2">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </rs2>
+</robot>
