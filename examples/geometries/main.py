@@ -83,7 +83,6 @@ class VisualisationWidget(FloatLayout):
         self.camera.pos.z = 1.5
         self.camera.look_at((0, 0, 0))
 
-
         self.camera.bind_to(self.renderer)
         self.renderer.render(scene, self.camera)
 

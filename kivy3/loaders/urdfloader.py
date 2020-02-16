@@ -108,7 +108,7 @@ class Joint():
 
 
 class URDFObject(Object3D):
-    ''' This is a 3d Object to hold information about a urdf '''
+    """ This is a 3d Object to hold information about a urdf """
     def __init__(self, urdf, package_path, base_link="base_link", **kw):
         super(URDFObject, self).__init__(**kw)
         self.urdf = urdf

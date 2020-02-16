@@ -16,6 +16,7 @@ DEFAULT_VERTEX_FORMAT = [
 ]
 DEFAULT_MESH_MODE = 'triangles'
 
+
 class STLMesh(Object3D):
     def __init__(self, v0, v1, v2, normals, material, **kw):
         super(STLMesh, self).__init__(**kw)
