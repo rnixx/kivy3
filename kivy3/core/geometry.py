@@ -57,3 +57,34 @@ class Geometry(object):
         b_minus_a.cross(c_minus_a)
         normal = b_minus_a
         return normal
+
+
+    def rotate_geometry(self, axis):
+        for v in self.vertices:
+            x = v[0]
+            y = v[1]
+            z = v[2]
+            if axis == 'x':
+                v[1] = z
+                v[2] = -y
+            elif axis == '-x':
+                v[1] = -z
+                v[2] = y
+            elif axis == 'y':
+                v[2] = x
+                v[0] = -z
+            elif axis == '-y':
+                v[2] = -x
+                v[0] = z
+            elif axis == 'z':
+                v[0] = y
+                v[1] = -x
+            elif axis == '-z':
+                v[0] = -y
+                v[1] = x
+
+    def translate_geometry(self, x, y, z):
+        for v in self.vertices:
+            v[0] += x
+            v[1] += y
+            v[2] += z

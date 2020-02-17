@@ -73,7 +73,7 @@ class Renderer(Widget):
         self.texture = self.fbo.texture
         self.camera = None
         self.scene = None
-        self.main_light = Light(renderer=self)
+        self.main_light = Light(renderer=self, pos=(0, 1, 0))
 
     def _config_fbo(self):
         # set shader file here
@@ -99,6 +99,7 @@ class Renderer(Widget):
         self.camera = camera
         self.camera.bind_to(self)
         self._instructions.add(scene.as_instructions())
+        self._update_matrices()
         Clock.schedule_once(self._update_matrices, -1)
 
     def on_size(self, instance, value):

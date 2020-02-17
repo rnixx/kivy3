@@ -7,7 +7,7 @@ from kivy.clock import Clock
 from kivy3 import Scene, Renderer, PerspectiveCamera, Geometry, Vector3, Material, Mesh, Face3
 from kivy3.core.line2 import Line2
 from kivy3.extras.geometries import BoxGeometry
-from kivy3.extras.grid import GridGeometry
+from kivy3.extras.geometries import GridGeometry
 from kivy3.loaders import OBJLoader
 from kivy.uix.floatlayout import FloatLayout
 from kivy3.objects.lines import Lines

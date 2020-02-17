@@ -54,11 +54,23 @@ class Material(ChangeState):
         specular = tuple(float(s) for s in specular)
         shininess = float(shininess)
         texture_ratio = float(texture_ratio)
-        id_color = tuple(float(i/255.) for i in id_color)
+
+        if id_color == (0,0,0):
+            id_color = (0,0,0,0)
+        else:
+            id_color = list(id_color)
+            id_color[0] = id_color[0]/255.
+            id_color[1] = id_color[1]/255.
+            id_color[2] = id_color[2]/255.
+            id_color.append(1)
+        id_color = tuple(id_color)
 
         # set attribute from locals
-        for k, v in locals().items():
+        for k, v in list(locals().items()):
             setattr(self, k, v)
+
+    def clear_id(self):
+        setattr(self,id_color,(0,0,0,0))
 
     def __setattr__(self, k, v):
         if k in MATERIAL_TO_SHADER_MAP:
