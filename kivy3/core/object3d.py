@@ -158,12 +158,13 @@ class Object3D(EventDispatcher):
     def on_angle_change(self, axis, angle):
         self._rotors[axis].angle = angle
 
-
-    def calculate_forward_kinematics(self, offset_xyz=[0,0,0], offset_rpy=[0,0,0], base=None):
+    def calculate_forward_kinematics(self, offset_xyz=[0, 0, 0], offset_rpy=[0, 0, 0], base=None):
         # Return [[xyz],[rpy]]
         xyz = offset_xyz
-        offset_ypr= [offset_rpy[2],offset_rpy[1],offset_rpy[0]]
+        offset_ypr = [offset_rpy[2],offset_rpy[1], offset_rpy[0]]
         ypr = R.from_euler('zyx', offset_ypr, degrees=True)
+
+        # Iterate through objects down the list and apply transformation to find forward kinematics.
         current_object = self
         while current_object is not base:
             # print(current_object.name, self.pos, g_c)
@@ -185,7 +186,7 @@ class Object3D(EventDispatcher):
             xyz = ry.dot(xyz)
             xyz = rz.dot(xyz)
 
-            #Calculate transform
+            # Calculate transform
             # g_c = Vector3(g_c[0],g_c[1],g_c[2])
             cur_rot = [current_object.rot[2],current_object.rot[1],current_object.rot[0]]
             current_ypr = R.from_euler('zyx', cur_rot, degrees=True)
@@ -200,7 +201,7 @@ class Object3D(EventDispatcher):
             xyz[2] += current_object.pos[2]
             current_object = current_object.parent
 
-        return [xyz,rpy]
+        return [xyz, rpy]
 
     def set_material(self, mat):
         # Override function to change the material of an object
