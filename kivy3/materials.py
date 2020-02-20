@@ -55,8 +55,8 @@ class Material(ChangeState):
         shininess = float(shininess)
         texture_ratio = float(texture_ratio)
 
-        if id_color == (0,0,0):
-            id_color = (0,0,0,0)
+        if id_color == (0, 0, 0):
+            id_color = (0, 0, 0, 1)
         else:
             id_color = list(id_color)
             id_color[0] = id_color[0]/255.
