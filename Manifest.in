@@ -1,7 +1,0 @@
-
-recursive-include kivy3 *.*
-include kivy3/default.glsl
-include kivy3/shaders/*.glsl
-include shaders/*.glsl
-include shaders/default.glsl
-include kivy3/shaders/default.glsl

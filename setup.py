@@ -22,8 +22,6 @@ setup(
     author_email='nskrypnik@gmail.com',
     include_package_data=True,
     packages=find_packages(exclude=("tests",)),
-    package_dir={'shaders': 'kivy3/shaders'},
-    package_data={'shaders': ['*.glsl']},
     data_files=list(examples.items()),
     requires=['kivy', ]
 )
