@@ -1,75 +1,90 @@
 import math
 from kivy.uix.widget import Widget
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.button import Button
+from kivy.uix.anchorlayout import AnchorLayout
 
-
-class OrbitControlWidget(Widget):
-    def __init__(self, renderer, radius, **kw):
+class OrbitControlWidget(FloatLayout):
+    def __init__(self, renderer, radius=1, theta=0, phi=0, target=(0, 0, 0), **kw):
         super(OrbitControlWidget, self).__init__()
         # self.camera = renderer.camera
         self.renderer = renderer
         self.radius = radius
-        self.target = [0., 0., 0.]
+        self.target = list(target)
         # Tilt angle
-        self.phi = 0.
+        self.phi = phi
         # Yaw angle
-        self.theta = 0.
+        self.theta = theta
         self.activated = False
         self.light = renderer.main_light
 
-
+        self.initial = [theta, phi, radius, target]
         self.update_cam()
-        pass
+
+    def reset_cam(self):
+        self.target = list(self.initial[3])
+        self.theta = self.initial[0]
+        self.phi = self.initial[1]
+        self.radius = self.initial[2]
+        self.update_cam()
+
 
     def on_touch_down(self, touch):
         # print("Touch Down", touch)
-        if 'button' in touch.profile:
-            if touch.button == 'left' or touch.button == 'right':
-                touch.grab(self)
-                self.activated = True
+        if self.collide_point(*touch.pos):
+            if 'button' in touch.profile:
+                if touch.button == 'left' or touch.button == 'right':
+                    touch.grab(self)
+                    self.activated = True
 
-        return True
+            return True
+
+
+
 
     def on_touch_up(self, touch):
         # print("Touch Up", touch)
-        if 'button' in touch.profile:
-            if touch.button == 'scrollup':
-                self.radius *= 1.1
-                self.update_cam()
-            if touch.button == 'scrolldown':
-                self.radius *= 0.9
-                self.update_cam()
-            if touch.button == 'left' or touch.button == 'right':
-                touch.ungrab(self)
-                self.activated = False
+        if self.collide_point(*touch.pos):
+            if 'button' in touch.profile:
+                if touch.button == 'scrollup':
+                    self.radius *= 1.1
+                    self.update_cam()
+                if touch.button == 'scrolldown':
+                    self.radius *= 0.9
+                    self.update_cam()
+                if touch.button == 'left' or touch.button == 'right':
+                    touch.ungrab(self)
+                    self.activated = False
 
-        return True
+            return True
 
     def on_touch_move(self, touch):
         # print("Touch Move", touch)
-        if 'button' in touch.profile and self.activated:
-            if touch.button == "left":
-                self.theta += 0.01 * float(touch.dx)
-                self.phi -= 0.01 * float(touch.dy)
-                self.phi = min([self.phi, math.pi/2])
-                self.phi = max([self.phi, -math.pi/2])
-                self.update_cam()
-            if touch.button == "right":
-                #x
-                self.target[0] += 0.001 * (float(touch.dy)
-                                           * math.cos(self.theta) * math.sin(self.phi)
-                                           - float(touch.dx)
-                                           * math.sin(self.theta)) \
-                                        * self.radius
-                # y
-                self.target[2] += 0.001 * (float(touch.dx)
-                                           * math.cos(self.theta)
-                                           + float(touch.dy)
-                                           * math.sin(self.theta) * math.sin(self.phi)) \
-                                        * self.radius
-                # z
-                self.target[1] += 0.001 * -float(touch.dy) * math.cos(self.phi) * self.radius
-                self.update_cam()
-        return True
+        if self.collide_point(*touch.pos):
+            if 'button' in touch.profile and self.activated:
+                if touch.button == "left":
+                    self.theta += 0.01 * float(touch.dx)
+                    self.phi -= 0.01 * float(touch.dy)
+                    self.phi = min([self.phi, math.pi/2])
+                    self.phi = max([self.phi, -math.pi/2])
+                    self.update_cam()
+                if touch.button == "right":
+                    #x
+                    self.target[0] += 0.001 * (float(touch.dy)
+                                               * math.cos(self.theta) * math.sin(self.phi)
+                                               - float(touch.dx)
+                                               * math.sin(self.theta)) \
+                                            * self.radius
+                    # y
+                    self.target[2] += 0.001 * (float(touch.dx)
+                                               * math.cos(self.theta)
+                                               + float(touch.dy)
+                                               * math.sin(self.theta) * math.sin(self.phi)) \
+                                            * self.radius
+                    # z
+                    self.target[1] += 0.001 * -float(touch.dy) * math.cos(self.phi) * self.radius
+                    self.update_cam()
+            return True
 
     def update_cam(self):
         # self.camera.pos[2] = 1.2
