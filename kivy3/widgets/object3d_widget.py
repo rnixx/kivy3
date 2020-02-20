@@ -1,8 +1,12 @@
+from scipy.spatial import Delaunay
+import time
+import threading
+import math
 from kivy.uix.relativelayout import RelativeLayout
 
 
 class Object3DWidget(RelativeLayout):
-    def __init__(self, object3d=None, renderer = None, **kw):
+    def __init__(self, object3d, renderer, **kw):
         super(Object3DWidget, self).__init__(**kw)
         self.object = object3d
         self.renderer = renderer
@@ -16,26 +20,21 @@ class Object3DWidget(RelativeLayout):
 
 
     def on_object_touch_down(self,touch):
-        """Function to override of what to do when touching objects."""
-        # print("Object was touched down")
+        #Function to override of what to do when touching objects.
+        print("Object was touched down")
         pass
 
     def on_object_touch_up(self,touch):
         #Function to override of what to do when touching objects.
-        # print("Object was touched up")
+        print("Object was touched up")
         pass
 
     def on_object_touch_move(self,touch):
         #Function to override of what to do when touching objects.
-        # print("Object was touched move")
+        print("Object was touched move")
         pass
 
     def get_centre_position(self):
-        """ Function to get the origins position of the object on the screen in px,py """
-        if self.renderer is None:
-            print("Errror, renderer is not defined")
-            return
-
         xyz, _ = self.object.calculate_forward_kinematics()
         _2d_point = self.renderer.camera.projection_matrix.project(
             xyz[0], xyz[1], xyz[2], self.renderer.camera.modelview_matrix,

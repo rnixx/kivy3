@@ -99,11 +99,11 @@ class Joint():
                            math.cos(a) + u_z**2*(1-math.cos(a))]]
         return matrix
 
-    def calculate_forward_kinematics(self, offset_xyz=[0,0,0]):
+    def get_global_coordinate(self, offset=[0,0,0]):
         # joint_offset = [self.joint.origin.position[0],
         #           self.joint.origin.position[1],
         #           self.joint.origin.position[2]]
-        return self.child.calculate_forward_kinematics(offset_xyz=offset_xyz)
+        return self.child.get_global_coordinate(offset=offset)
         pass
 
 
@@ -117,7 +117,7 @@ class URDFObject(Object3D):
 
         self.default_material = \
             Material(color=(0.1, 0.1, 0.1), diffuse=(0.1, 0.1, 0.1),
-                     specular=(0.1, 0.1, 0.1), id_color=(0, 0, 99))
+                     specular=(0.1, 0.1, 0.1))
 
         # Create material dictionary
         self.materials = {}
@@ -125,7 +125,7 @@ class URDFObject(Object3D):
             color = material.color.rgba
             self.materials[material.name] = Material(color=color[0:3],
                                                      diffuse=color[0:3],
-                                                     specular=(0.1, 0.1, 0.1), id_color=(0, 0, 99))
+                                                     specular=(0.1, 0.1, 0.1))
         self.link_dict = {}
         self.joint_dict = {}
 
@@ -160,7 +160,7 @@ class URDFObject(Object3D):
                         color = visual.material.color.rgba
                         material = Material(color=color[0:3],
                                             diffuse=color[0:3],
-                                            specular=(0.1, 0.1, 0.1), id_color=(0, 0, 99))
+                                            specular=(0.1, 0.1, 0.1))
                 else:
                     material = self.default_material
 
