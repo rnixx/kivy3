@@ -21,10 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
-import numpy as np
+
 from kivy.graphics import Mesh as KivyMesh
-from kivy3 import Vector3
-from kivy3.core.object3d import Object3D
+from kivy3 import Object3D, Mesh, Material, Vector2
+
+import numpy as np
 
 DEFAULT_VERTEX_FORMAT = [
     (b'v_pos', 3, 'float'),
@@ -35,38 +36,39 @@ DEFAULT_MESH_MODE = 'triangles'
 
 
 class STLMesh(Object3D):
-
-    def __init__(self, stl_mesh, material, **kw):
+    def __init__(self, v0, v1, v2, normals, material, **kw):
         super(STLMesh, self).__init__(**kw)
-        self.geometry = stl_mesh
-        self.material = material
-        self.mtl = self.material  # shortcut for material property
         self.vertex_format = kw.pop('vertex_format', DEFAULT_VERTEX_FORMAT)
         self.mesh_mode = kw.pop('mesh_mode', DEFAULT_MESH_MODE)
-        self.create_mesh()
+        self.material = material
+        self.normals = normals
+        indices = list(range(0, len(v0)*3))
+        uvs = np.zeros((len(v0), 2)).astype(np.float32)
+        vertices = list(np.block([v0.astype(np.float32),normals.astype(np.float32),uvs,v1.astype(np.float32),normals.astype(np.float32),uvs,v2.astype(np.float32),normals.astype(np.float32),uvs]).flatten())
+        kw2=dict(vertices=vertices,
+                indices=indices,
+                fmt=self.vertex_format,
+                mode=self.mesh_mode)
 
-    def create_mesh(self):
-        """ Create real mesh object from the geometry and material """
-        max = 65535
-        indices = list(range(0, len(self.geometry.v0) * 3))[0:max]
-
-        v0 = self.geometry.v0.astype(np.float32)[0:max]
-        v1 = self.geometry.v1.astype(np.float32)[0:max]
-        v2 = self.geometry.v2.astype(np.float32)[0:max]
-        normals = self.geometry.normals.astype(np.float32)[0:max]
-        uvs = np.zeros((len(v0), 2)).astype(np.float32)[0:max]
-        vertices = np.block([v0, normals, uvs, v1, normals, uvs, v2, normals, uvs]).flatten()
-
-        kw = dict(
-            vertices=vertices,
-            indices=indices,
-            fmt=self.vertex_format,
-            mode=self.mesh_mode
-        )
-        if self.material.map:
-            kw['texture'] = self.material.map
-        self._mesh = KivyMesh(**kw)
+        # if self.material.map:
+        #     kw2['texture'] = self.material.map
+        self._mesh = KivyMesh(**kw2)
 
     def custom_instructions(self):
         yield self.material
         yield self._mesh
+
+    def set_material(self, mat):
+        idx = 0
+        for instr in self._instructions.children:
+            if instr.__class__.__name__ == "Material":
+                self._instructions.children[idx] = mat
+                return
+            idx += 1
+
+    def get_material(self):
+        idx = 0
+        for instr in self._instructions.children:
+            if instr.__class__.__name__ == "Material":
+                return self._instructions.children[idx]
+            idx += 1

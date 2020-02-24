@@ -117,7 +117,7 @@ class URDFObject(Object3D):
 
         self.default_material = \
             Material(color=(0.1, 0.1, 0.1), diffuse=(0.1, 0.1, 0.1),
-                     specular=(0.1, 0.1, 0.1), id_color=(0, 0, 99))
+                     specular=(0.1, 0.1, 0.1))
 
         # Create material dictionary
         self.materials = {}
@@ -125,7 +125,7 @@ class URDFObject(Object3D):
             color = material.color.rgba
             self.materials[material.name] = Material(color=color[0:3],
                                                      diffuse=color[0:3],
-                                                     specular=(0.1, 0.1, 0.1), id_color=(0, 0, 99))
+                                                     specular=(0.1, 0.1, 0.1))
         self.link_dict = {}
         self.joint_dict = {}
 
@@ -160,7 +160,7 @@ class URDFObject(Object3D):
                         color = visual.material.color.rgba
                         material = Material(color=color[0:3],
                                             diffuse=color[0:3],
-                                            specular=(0.1, 0.1, 0.1), id_color=(0, 0, 99))
+                                            specular=(0.1, 0.1, 0.1))
                 else:
                     material = self.default_material
 
