@@ -1,5 +1,4 @@
 import os
-os.environ["KIVY_NO_CONSOLELOG"] = "1"
 from kivy.uix.floatlayout import FloatLayout
 import copy
 from kivy3 import Renderer

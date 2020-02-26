@@ -55,6 +55,7 @@ class BoxGeometry(Geometry):
                      ]
 
     def __init__(self, width, height, depth, **kw):
+        """ X, Y, Z"""
         name = kw.pop('name', '')
         super(BoxGeometry, self).__init__(name)
         self.width_segment = kw.pop('width_segment', 1)

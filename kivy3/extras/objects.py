@@ -13,9 +13,10 @@ class ArrowObject(Object3D):
         cylinder = CylinderGeometry(radius, 4.*length/5.)
         cylinder_mesh = Mesh(cylinder, material)
 
-        cone_mesh.position.z = 4*length/5
-        cylinder_mesh.position.z = 2.*length/5
-
+        cone_mesh.position.x = 4*length/5
+        cone_mesh.rot.y = 90.
+        cylinder_mesh.position.x = 2.*length/5
+        cylinder_mesh.rot.y = 90.
         self.add(cone_mesh)
         self.add(cylinder_mesh)
         pass
@@ -33,8 +34,8 @@ class AxisObject(Object3D):
         y_axis = ArrowObject(green_mat, length=length)
         z_axis = ArrowObject(blue_mat, length=length)
 
-        x_axis.rot.y = 90
-        y_axis.rot.x = -90
+        z_axis.rot.y = 90
+        y_axis.rot.z = -90
 
         self.add(x_axis)
         self.add(y_axis)

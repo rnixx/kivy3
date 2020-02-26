@@ -62,7 +62,7 @@ class VisualisationWidget(FloatLayout):
         material = Material(color=(00,0.3,0), diffuse=(0,0.3,0), specular=(0.3,0.3,0.3), id_color=(id_color))
         object2 = Mesh(geometry, material)
         object2.pos.x = 1
-        widget2 = Moveable3DWidget(object2, self.renderer, self.orbit)
+        widget2 = Moveable3DWidget(object2, self.renderer, self.orbit, axis=[1,0,0])
         self.selection_widget.register(id_color, widget2)
         base.add(object2)
 
