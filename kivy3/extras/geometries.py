@@ -333,22 +333,24 @@ class ConeGeometry(Geometry):
             face3 = Face3(*face)
             face3.vertex_normals=[normal,normal,normal]
             self.faces.append(face3)
-
+        self.vertices = _vertices
         for f in range(1,self.circle_segment+1):
             # trialngle corners
-            normal = Vector3(0,0,-1)
+            # normal = Vector3(0,0,-1)
             if (f+1 == self.circle_segment +1):
                 face = (0,f,1)
                 face3 = Face3(*face)
-                face3.vertex_normals=[_vertex_normals[0],_vertex_normals[f],_vertex_normals[1]]
+                normal = self.calculate_normal(face3)
+                face3.vertex_normals=[normal,_vertex_normals[f],_vertex_normals[1]]
             else:
                 face = (0,f,f+1)
                 face3 = Face3(*face)
-                face3.vertex_normals=[_vertex_normals[0],_vertex_normals[f],_vertex_normals[f+1]]
+                normal = self.calculate_normal(face3)
+                face3.vertex_normals=[normal,_vertex_normals[f],_vertex_normals[f+1]]
 
             self.faces.append(face3)
 
-        self.vertices = _vertices
+
 
 
 class GridGeometry(Geometry):

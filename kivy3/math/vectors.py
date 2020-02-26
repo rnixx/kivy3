@@ -27,6 +27,7 @@ __all__ = ('Vector2', 'Vector3', 'Vector4', )
 import math
 
 from copy import copy
+import numpy as np
 
 
 class BaseVector(list):
