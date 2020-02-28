@@ -1,10 +1,11 @@
 import math
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button
 from kivy.uix.anchorlayout import AnchorLayout
 
-class OrbitControlWidget(FloatLayout):
+class OrbitControlWidget(RelativeLayout):
     def __init__(self, renderer, radius=1, theta=0, phi=0, target=(0, 0, 0), **kw):
         super(OrbitControlWidget, self).__init__()
         # self.camera = renderer.camera

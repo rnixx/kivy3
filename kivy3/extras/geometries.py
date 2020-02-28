@@ -86,7 +86,7 @@ class BoxGeometry(Geometry):
 
 
 class CylinderGeometry(Geometry):
-    def __init__(self, radius, length, **kw):
+    def __init__(self, radius=0.5, length=1., **kw):
         name = kw.pop('name', '')
         super(CylinderGeometry, self).__init__(name)
         self.circle_segment = kw.pop('circle_segment', 16)
@@ -106,8 +106,8 @@ class CylinderGeometry(Geometry):
         _cylinder_normals = []
 
         for i in range(self.circle_segment):
-            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
-            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
+            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
+            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
 
             n = Vector3(x,y,0)
             n.normalize()
@@ -321,8 +321,8 @@ class ConeGeometry(Geometry):
         _vertex_normals.append((0,0,1))
 
         for i in range(self.circle_segment):
-            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
-            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
+            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
+            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
             _vertex_normals.append((x/self.rad, y/self.rad, 0))
             _vertices.append((x,y,0))
 

@@ -54,7 +54,7 @@ class Object3D(EventDispatcher):
 
     def __init__(self, **kw):
         self.name = kw.pop('name', '')
-        super(Object3D, self).__init__(**kw)
+        super(Object3D, self).__init__()
         self.children = list()
         self.parent = None
 
@@ -80,6 +80,14 @@ class Object3D(EventDispatcher):
 
         #Vertices Object contating an approximate bound box of the object.
         self.bounding_vertices = []
+
+    def set_rotation_rpy(self, rpy):
+        """Set rotation for xyz rpy order"""
+        r = R.from_euler('xyz', rpy, degrees=True)
+        a = r.as_euler('zyx', degrees=True)
+        self.rot.x = float(a[2])
+        self.rot.y = float(a[1])
+        self.rot.z = float(a[0])
 
     def set_position(self, xyz):
         self.pos.x = float(xyz[0])

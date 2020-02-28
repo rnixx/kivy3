@@ -1,11 +1,12 @@
 import os
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.relativelayout import RelativeLayout
 import copy
 from kivy3 import Renderer
 _this_path = os.path.dirname(os.path.realpath(__file__))
 select_mode_shader = os.path.join(_this_path, 'select_mode.glsl')
 
-class SelectionWidget(FloatLayout):
+class SelectionWidget(RelativeLayout):
     def __init__(self, renderer, **kw):
         super(SelectionWidget, self).__init__()
         self.object_dict = {}
