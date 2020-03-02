@@ -85,6 +85,12 @@ class Mesh(Object3D):
             kw['texture'] = self.material.map
         self._mesh = KivyMesh(**kw)
 
+
+    def set_material_color(self, color):
+        self.material.__setattr__('color', tuple(float(c) for c in color))
+        self.material.__setattr__('diffuse', tuple(float(c) for c in color))
+
+
     def custom_instructions(self):
         yield self.material
         yield self._mesh

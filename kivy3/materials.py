@@ -70,7 +70,7 @@ class Material(ChangeState):
             setattr(self, k, v)
 
     def clear_id(self):
-        setattr(self,id_color,(0,0,0,1))
+        setattr(self,"id_color",(0,0,0,1))
 
     def __setattr__(self, k, v):
         if k in MATERIAL_TO_SHADER_MAP:

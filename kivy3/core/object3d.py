@@ -113,7 +113,8 @@ class Object3D(EventDispatcher):
         if instr in self._instructions.children:
             self._instructions.remove(instr)
         else:
-            print("Object not found")
+            pass
+            # print("Object not found")
         pass
 
     def add(self, *objs):
