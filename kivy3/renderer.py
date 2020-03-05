@@ -36,7 +36,6 @@ in your application
 import os
 import kivy3
 
-
 from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.graphics.fbo import Fbo
@@ -44,6 +43,7 @@ from kivy.core.window import Window
 from kivy.graphics.instructions import InstructionGroup
 from kivy.graphics.opengl import glEnable, glDisable, GL_DEPTH_TEST
 from kivy.graphics.transformation import Matrix
+from kivy.graphics.context_instructions import Color
 from kivy.graphics import (
     Callback, PushMatrix, PopMatrix,
     Rectangle, Canvas, UpdateNormalMatrix
@@ -65,10 +65,11 @@ class Renderer(Widget):
         super(Renderer, self).__init__(**kw)
 
         with self.canvas:
+            clear_color = Color(rgba=(1, 1, 1, 1))
             self._viewport = Rectangle(size=self.size, pos=self.pos)
             self.fbo = Fbo(size=self.size,
                            with_depthbuffer=True, compute_normal_mat=True,
-                           clear_color=(0., 0., 0., 0.))
+                           clear_color=(1, 1, 1, 1))
         self._config_fbo()
         self.texture = self.fbo.texture
         self.camera = None
