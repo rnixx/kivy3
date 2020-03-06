@@ -55,6 +55,7 @@ class BoxGeometry(Geometry):
                      ]
 
     def __init__(self, width, height, depth, **kw):
+        """ X, Y, Z"""
         name = kw.pop('name', '')
         super(BoxGeometry, self).__init__(name)
         self.width_segment = kw.pop('width_segment', 1)
@@ -85,7 +86,7 @@ class BoxGeometry(Geometry):
 
 
 class CylinderGeometry(Geometry):
-    def __init__(self, radius, length, **kw):
+    def __init__(self, radius=0.5, length=1., **kw):
         name = kw.pop('name', '')
         super(CylinderGeometry, self).__init__(name)
         self.circle_segment = kw.pop('circle_segment', 16)
@@ -105,8 +106,8 @@ class CylinderGeometry(Geometry):
         _cylinder_normals = []
 
         for i in range(self.circle_segment):
-            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
-            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
+            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
+            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
 
             n = Vector3(x,y,0)
             n.normalize()
@@ -320,8 +321,8 @@ class ConeGeometry(Geometry):
         _vertex_normals.append((0,0,1))
 
         for i in range(self.circle_segment):
-            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
-            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment)) * 0.5 * float(self.rad)
+            x = math.cos(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
+            y = math.sin(float(i) * (2.*math.pi)/float(self.circle_segment))  * float(self.rad)
             _vertex_normals.append((x/self.rad, y/self.rad, 0))
             _vertices.append((x,y,0))
 
@@ -332,22 +333,24 @@ class ConeGeometry(Geometry):
             face3 = Face3(*face)
             face3.vertex_normals=[normal,normal,normal]
             self.faces.append(face3)
-
+        self.vertices = _vertices
         for f in range(1,self.circle_segment+1):
             # trialngle corners
-            normal = Vector3(0,0,-1)
+            # normal = Vector3(0,0,-1)
             if (f+1 == self.circle_segment +1):
                 face = (0,f,1)
                 face3 = Face3(*face)
-                face3.vertex_normals=[_vertex_normals[0],_vertex_normals[f],_vertex_normals[1]]
+                normal = self.calculate_normal(face3)
+                face3.vertex_normals=[normal,_vertex_normals[f],_vertex_normals[1]]
             else:
                 face = (0,f,f+1)
                 face3 = Face3(*face)
-                face3.vertex_normals=[_vertex_normals[0],_vertex_normals[f],_vertex_normals[f+1]]
+                normal = self.calculate_normal(face3)
+                face3.vertex_normals=[normal,_vertex_normals[f],_vertex_normals[f+1]]
 
             self.faces.append(face3)
 
-        self.vertices = _vertices
+
 
 
 class GridGeometry(Geometry):

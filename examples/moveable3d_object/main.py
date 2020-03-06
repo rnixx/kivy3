@@ -15,6 +15,8 @@ from kivy3.extras.objects import ArrowObject, AxisObject
 from kivy3.loaders import URDFLoader
 from kivy3 import Mesh, Material, Object3D
 from kivy3.widgets import OrbitControlWidget, SelectionWidget, Object3DWidget
+from kivy3.extras.Widgets3D import Moveable3DWidget
+
 
 from kivy.graphics.opengl import glEnable, glDisable, GL_DEPTH_TEST, glReadPixels, GL_RGBA, GL_UNSIGNED_BYTE
 
@@ -39,28 +41,28 @@ class VisualisationWidget(FloatLayout):
 
         self.renderer = Renderer(shader_file=shader_file)
         self.renderer.set_clear_color((.16, .30, .44, 1.))
+        self.orbit = OrbitControlWidget(self.renderer, 4.)
 
         self.selection_widget = SelectionWidget(self.renderer)
 
         scene = Scene()
 
         base = Object3D()
-        id_color = (1,0,0)
+        id_color = (1, 0, 0)
         geometry = BoxGeometry(1, 1, 1)
-        material = Material(color=(0.3,0,0), diffuse=(0.3,0,0), specular=(0.3,0.3,0.3), id_color=(id_color))
+        material = Material(color=(0.3, 0, 0), diffuse=(0.3, 0, 0), specular=(0.3, 0.3, 0.3), id_color=(id_color))
         object1 = Mesh(geometry, material)
 
         widget1 = Object3DWidget(object1,self.renderer)
         self.selection_widget.register(id_color, widget1)
         base.add(object1)
 
-
         id_color = (2,0,0)
         geometry = BoxGeometry(1, 1, 1)
         material = Material(color=(00,0.3,0), diffuse=(0,0.3,0), specular=(0.3,0.3,0.3), id_color=(id_color))
         object2 = Mesh(geometry, material)
         object2.pos.x = 1
-        widget2 = Object3DWidget(object2,self.renderer)
+        widget2 = Moveable3DWidget(object2, self.renderer, self.orbit)
         self.selection_widget.register(id_color, widget2)
         base.add(object2)
 
@@ -84,17 +86,15 @@ class VisualisationWidget(FloatLayout):
         self.camera.pos.z = 1.5
         self.camera.look_at((0, 0, 0))
 
-
         self.camera.bind_to(self.renderer)
         self.renderer.render(scene, self.camera)
 
-        self.add_widget(self.renderer, index=30)
-        self.orbit = OrbitControlWidget(self.renderer, 4.)
-        self.add_widget(self.orbit, index=99)
+
         self.add_widget(self.selection_widget, index=98)
+        self.add_widget(self.orbit, index=99)
+        self.add_widget(self.renderer, index=100)
+
         self.renderer.bind(size=self._adjust_aspect)
-
-
 
     def _adjust_aspect(self, inst, val):
         rsize = self.renderer.size

@@ -4,12 +4,13 @@ import math
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.graphics.stencil_instructions import StencilPush, StencilPop
+from kivy.properties import ObjectProperty
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
 from kivy3 import Scene, Renderer, PerspectiveCamera, Geometry, Vector3, Material, Mesh, Face3
 from kivy3.core.line2 import Line2
-from kivy3.extras.geometries import BoxGeometry
-from kivy3.extras.grid import GridGeometry
+from kivy3.extras.geometries import BoxGeometry, GridGeometry
 from kivy3.loaders import OBJLoader
 from kivy.uix.floatlayout import FloatLayout
 from kivy3.objects.lines import Lines
@@ -33,7 +34,7 @@ class MainApp(App):
 
         root = ObjectTrackball(camera, 10, self.renderer)
 
-        id_color = (0, 0, 0x7F, 0)
+        id_color = (0, 0, 0x7F)
         geometry = BoxGeometry(1, 1, 1)
         material = Material(color=(1., 1., 1.), diffuse=(1., 1., 1.),
                             specular=(.35, .35, .35), id_color=id_color,
@@ -42,32 +43,20 @@ class MainApp(App):
         scene.add(obj)
         root.object_list.append({'id': id_color, 'obj': obj})
 
-        id_color = (0, 0x7F, 0, 255)
+        id_color = (0, 0x7F, 0)
         geometry = BoxGeometry(1, 1, 1)
         material = Material(color=(0., 0., 1.), diffuse=(0., 0., 1.),
                             specular=(.35, .35, .35), id_color=id_color,
                             shininess=1.)
         obj = Mesh(geometry, material)
-        obj.position.x = 1
+        obj.position.x = 2
         scene.add(obj)
         root.object_list.append({'id': id_color, 'obj': obj})
-
-
-        id_color = (0x7F, 0, 0, 255)
-        geometry = BoxGeometry(1, 1, 1)
-        material = Material(color=(0., 1., 0.), diffuse=(0., 0., 1.),
-                            specular=(.35, .35, .35), id_color=id_color,
-                            shininess=1., transparency=1)
-
-        ignored_obj = Mesh(geometry,material)
-        ignored_obj.position.x = -1
-        scene.add(ignored_obj)
-        root.object_list.append({'id': id_color, 'obj': ignored_obj})
 
         # create a grid on the xz plane
         geometry = GridGeometry(size=(30, 30), spacing=1)
         material = Material(color=(1., 1., 1.), diffuse=(1., 1., 1.),
-                            specular=(.35, .35, .35), transparency=1)
+                            specular=(.35, .35, .35), transparency=.5)
         lines = Lines(geometry, material)
         lines.rotation.x = 90
         scene.add(lines)
@@ -98,6 +87,38 @@ class MainApp(App):
         lines.position.y = -0.01
         scene.add(lines)
 
+        # make the triad
+        geometry = Geometry()
+        geometry.vertices = [[0.0, 0.0, 0.0], [3.0, 0.0, 0.0]]
+        geometry.lines = [Line2(a=0, b=1)]
+        material = Material(color=(1., 0., 0.), diffuse=(1., 0., 0.),
+                            specular=(.35, .35, .35))
+        x_line = Lines(geometry, material)
+
+        scene.add(x_line)
+
+        geometry = Geometry()
+        geometry.vertices = [[0.0, 0.0, 0.0], [0.0, 3.0, 0.0]]
+        geometry.lines = [Line2(a=0, b=1)]
+        material = Material(color=(0., 1., 0.), diffuse=(0., 1., 0.),
+                            specular=(1., 1.0, 1.0))
+        y_line = Lines(geometry, material)
+
+        x_line.add(y_line)
+
+        geometry = Geometry()
+        geometry.vertices = [[0.0, 0.0, 0.0], [0.0, 0.0, 3.0]]
+        geometry.lines = [Line2(a=0, b=1)]
+        material = Material(color=(0., 0., 1.), diffuse=(0., 0., 1.),
+                            specular=(.35, .35, .35))
+        z_line = Lines(geometry, material)
+
+        x_line.add(z_line)
+        x_line.position.y = 0.5
+        x_line.position.x = 0.5
+        x_line.position.z = 0.5
+        root.triad = x_line
+
         self.renderer.render(scene, camera)
         self.renderer.main_light.intensity = 1000
         self.renderer.main_light.pos = (10, 10, -10)
@@ -105,7 +126,14 @@ class MainApp(App):
         root.add_widget(self.renderer)
         self.renderer.bind(size=self._adjust_aspect)
 
-        return root
+        box = BoxLayout()
+        box.add_widget(root)
+
+        controls = Controls()
+        root.controls = controls
+        box.add_widget(controls)
+
+        return box
 
     def _adjust_aspect(self, inst, val):
         rsize = self.renderer.size
@@ -113,9 +141,15 @@ class MainApp(App):
         self.renderer.camera.aspect = aspect
 
 
+class Controls(BoxLayout):
+    pass
+
+
 class ObjectTrackball(FloatLayout):
     selected_object = None
     object_list = []
+    controls = ObjectProperty()
+    triad = None
 
     def __init__(self, camera, radius, renderer, *args, **kw):
         super(ObjectTrackball, self).__init__(*args, **kw)
@@ -128,15 +162,34 @@ class ObjectTrackball(FloatLayout):
         self.camera.pos.z = radius
         camera.look_at((0, 0, 0))
 
+    def on_controls(self, inst, controls):
+        controls.bind(x_rot=self.set_rotation)
+        controls.bind(y_rot=self.set_rotation)
+        controls.bind(z_rot=self.set_rotation)
+        controls.bind(x_trans=self.set_rotation)
+        controls.bind(y_trans=self.set_rotation)
+        controls.bind(z_trans=self.set_rotation)
+
+    def set_rotation(self, inst, value):
+        if self.triad:
+            self.triad.rot.x = self.controls.x_rot
+            self.triad.rot.y = self.controls.y_rot
+            self.triad.rot.z = self.controls.z_rot
+            self.triad.pos.x = self.controls.x_trans
+            self.triad.pos.y = self.controls.y_trans
+            self.triad.pos.z = self.controls.z_trans
+            self.camera.look_at((0, 0, 0))
+
     def define_rotate_angle(self, touch):
         theta_angle = (touch.dx / self.width) * -360
         phi_angle = (touch.dy / self.height) * 360
         return phi_angle, theta_angle
 
     def on_touch_down(self, touch):
-        touch.grab(self)
-        self._touches.append(touch)
-        self.select_clicked_object(touch)
+        if self.collide_point(touch.pos[0], touch.pos[1]):
+            touch.grab(self)
+            self._touches.append(touch)
+            self.select_clicked_object(touch)
 
     def select_clicked_object(self, touch):
         self.renderer.fbo.shader.source = 'select_mode.glsl'
@@ -154,8 +207,9 @@ class ObjectTrackball(FloatLayout):
         self.renderer.fbo.draw()
 
     def on_touch_up(self, touch):
-        touch.ungrab(self)
-        self._touches.remove(touch)
+        if touch in self._touches:
+            touch.ungrab(self)
+            self._touches.remove(touch)
 
     def on_touch_move(self, touch):
         if touch in self._touches and touch.grab_current == self:

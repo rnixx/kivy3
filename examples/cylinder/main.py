@@ -6,8 +6,7 @@ from kivy.clock import Clock
 
 from kivy3 import Scene, Renderer, PerspectiveCamera, Geometry, Vector3, Material, Mesh, Face3
 from kivy3.core.line2 import Line2
-from kivy3.extras.prism import PrismGeometry
-from kivy3.extras.grid import GridGeometry
+from kivy3.extras.geometries import CylinderGeometry, GridGeometry
 from kivy3.loaders import OBJLoader
 from kivy.uix.floatlayout import FloatLayout
 from kivy3.objects.lines import Lines
@@ -29,7 +28,7 @@ class MainApp(App):
         self.renderer.main_light.intensity = 5000
         root = ObjectTrackball(camera, 10)
 
-        geometry = PrismGeometry(radius=1, height=1, segments=64)
+        geometry = CylinderGeometry(radius=1, length=1)
         material = Material(color=(1., 1., 1.), diffuse=(1., 1., 1.),
                             specular=(.35, .35, .35), shininess=200, transparency=0.8)
         obj = Mesh(geometry, material)

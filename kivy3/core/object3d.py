@@ -54,7 +54,7 @@ class Object3D(EventDispatcher):
 
     def __init__(self, **kw):
         self.name = kw.pop('name', '')
-        super(Object3D, self).__init__(**kw)
+        super(Object3D, self).__init__()
         self.children = list()
         self.parent = None
 
@@ -81,11 +81,29 @@ class Object3D(EventDispatcher):
         #Vertices Object contating an approximate bound box of the object.
         self.bounding_vertices = []
 
+    def set_rotation_rpy(self, rpy):
+        """Set rotation for xyz rpy order"""
+        r = R.from_euler('xyz', rpy, degrees=True)
+        a = r.as_euler('zyx', degrees=True)
+        self.rot.x = float(a[2])
+        self.rot.y = float(a[1])
+        self.rot.z = float(a[0])
+
+    def set_rotation(self, rpy):
+        self.rot.x = float(rpy[0])
+        self.rot.y = float(rpy[1])
+        self.rot.z = float(rpy[2])
+
+    def set_position(self, xyz):
+        self.pos.x = float(xyz[0])
+        self.pos.y = float(xyz[1])
+        self.pos.z = float(xyz[2])
 
     def add_object(self, *objs):
         #Add object after rendering has begun
         for obj in objs:
-            self._add_child(obj)
+            if obj not in self.children:
+                self._add_child(obj)
             self._instructions.add(self._push_matrix)
             self._instructions.add(self._translate)
             self._instructions.add(self.scale)
@@ -100,7 +118,8 @@ class Object3D(EventDispatcher):
         if instr in self._instructions.children:
             self._instructions.remove(instr)
         else:
-            print("Object not found")
+            pass
+            # print("Object not found")
         pass
 
     def add(self, *objs):

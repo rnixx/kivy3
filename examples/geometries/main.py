@@ -1,5 +1,4 @@
 import os
-os.environ["KIVY_NO_CONSOLELOG"] = "1"
 import math
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout

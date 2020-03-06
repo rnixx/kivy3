@@ -52,8 +52,10 @@ class Geometry(object):
         vec_a = self.vertices[face.a]
         vec_b = self.vertices[face.b]
         vec_c = self.vertices[face.c]
-        b_minus_a = Vector3.sub_vectors(vec_b, vec_a)
-        c_minus_a = Vector3.sub_vectors(vec_c, vec_a)
+        b_minus_a = Vector3((vec_b[0]-vec_a[0],vec_b[1]-vec_a[1], vec_b[2]-vec_a[2]))
+        # b_minus_a = Vector3.sub_vectors(vec_b, vec_a)
+        c_minus_a = Vector3((vec_c[0] - vec_a[0], vec_c[1] - vec_a[1], vec_c[2] - vec_a[2]))
+        # c_minus_a = Vector3.sub_vectors(vec_c, vec_a)
         b_minus_a.cross(c_minus_a)
         normal = b_minus_a
         return normal

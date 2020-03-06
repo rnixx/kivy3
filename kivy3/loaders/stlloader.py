@@ -123,6 +123,7 @@ class STLLoader(BaseLoader):
 
 
         stl_object = STLObject(stl,self.material)
+        # stl_object.scale=[0.5,1,1]
 
 
 
