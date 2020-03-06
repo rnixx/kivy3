@@ -89,6 +89,11 @@ class Object3D(EventDispatcher):
         self.rot.y = float(a[1])
         self.rot.z = float(a[0])
 
+    def set_rotation(self, rpy):
+        self.rot.x = float(rpy[0])
+        self.rot.y = float(rpy[1])
+        self.rot.z = float(rpy[2])
+
     def set_position(self, xyz):
         self.pos.x = float(xyz[0])
         self.pos.y = float(xyz[1])
