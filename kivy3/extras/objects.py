@@ -28,8 +28,8 @@ class AxisObject(Object3D):
     #Red is X, Green is Y Blue is Z
     def __init__(self, id_color_x = None, id_color_y = None, id_color_z = None, **kw):
         length=kw.pop('length', 0.1)
-        radius=kw.pop('radius', length/7.)
-        cone_radius = kw.pop('cone_radius', length*2.)
+        radius=kw.pop('radius', length/14.)
+        cone_radius = kw.pop('cone_radius', radius*2.)
         alpha=kw.pop('alpha', 1)
         super(AxisObject, self).__init__(**kw)
         red_mat = Material(color=(1,0,0), diffuse=(1,0,0), specular=(0.3,0.3,0.3), transparency=alpha, id_color=id_color_x)
@@ -40,7 +40,7 @@ class AxisObject(Object3D):
         z_axis = ArrowObject(blue_mat, length=length, radius=radius, cone_radius=cone_radius)
 
         z_axis.rot.y = -90
-        y_axis.rot.z = -90
+        y_axis.rot.z = +90
 
         self.add(x_axis)
         self.add(y_axis)
