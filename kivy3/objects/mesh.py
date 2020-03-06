@@ -85,6 +85,9 @@ class Mesh(Object3D):
             kw['texture'] = self.material.map
         self._mesh = KivyMesh(**kw)
 
+    def set_mesh_mode(self, mode):
+        self._mesh.mode = mode
+
 
     def set_material_color(self, color):
         self.material.__setattr__('color', tuple(float(c) for c in color))
