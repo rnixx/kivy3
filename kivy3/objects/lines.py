@@ -58,7 +58,7 @@ class Lines(Object3D):
                 try:
                     normal = line.vertex_normals[i]
                 except IndexError:
-                    normal = Vector3([0, 0, 0])
+                    normal = Vector3([0, 1, 1])
                 vertices.extend(normal)
                 try:
                     tex_coords = self.geometry.face_vertex_uvs[0][idx]
@@ -79,6 +79,10 @@ class Lines(Object3D):
         if self.material.map:
             kw['texture'] = self.material.map
         self._mesh = KivyMesh(**kw)
+
+    def set_material_color(self, color):
+        self.material.__setattr__('color', tuple(float(c) for c in color))
+        self.material.__setattr__('diffuse', tuple(float(c) for c in color))
 
     def custom_instructions(self):
         yield self.material

@@ -53,6 +53,11 @@ class OrbitControlWidget(RelativeLayout):
         self.theta = self.initial[0]
         self.phi = self.initial[1]
         self.radius = self.initial[2]
+
+        self.sp_target = list(self.initial[3])
+        self.sp_theta = self.initial[0]
+        self.sp_phi = self.initial[1]
+        self.sp_radius = self.initial[2]
         self.update_cam()
 
 

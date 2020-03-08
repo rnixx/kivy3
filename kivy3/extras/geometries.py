@@ -44,7 +44,11 @@ class BoxGeometry(Geometry):
                       (1, -1, 1), (-1, -1, 1),
                       ]
 
-    _cube_faces = [(0, 1, 2), (0, 2, 3), (3, 2, 6),
+    _cube_lines = [(0, 1), (1, 2), (2, 3), (3, 0),
+                   (4, 5), (5, 6), (6, 7), (7, 4),
+                   (0, 4), (1, 5), (2, 6), (3, 7)]
+
+    _cube_faces = [(0, 1, 2), (0, 2, 3), (2, 3, 6),
                    (3, 6, 7), (7, 6, 5), (7, 5, 4),
                    (4, 5, 1), (4, 1, 0), (4, 0, 3),
                    (7, 4, 3), (5, 1, 2), (6, 5, 2)
@@ -83,6 +87,9 @@ class BoxGeometry(Geometry):
             face3.vertex_normals = [normal, normal, normal]
             n_idx += 1
             self.faces.append(face3)
+
+        for l in self._cube_lines:
+            self.lines.append(Line2(a=l[0], b=l[1]))
 
 
 class CylinderGeometry(Geometry):
