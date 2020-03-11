@@ -21,18 +21,27 @@ class Object3DWidget(RelativeLayout):
 
     def on_object_touch_down(self,touch):
         #Function to override of what to do when touching objects.
-        print("Object was touched down")
+        print(__name__, "on_object_touch_down() Object was touched down")
         pass
 
     def on_object_touch_up(self,touch):
         #Function to override of what to do when touching objects.
-        print("Object was touched up")
+        print(__name__, "on_object_touch_up() Object was touched up")
         pass
 
     def on_object_touch_move(self,touch):
         #Function to override of what to do when touching objects.
-        print("Object was touched move")
+        print(__name__, "on_object_touch_move() Object was touched move")
         pass
+
+    def on_object_hover_off(self):
+        print(__name__, "on_object_hover_off() Object was hovered off")
+        pass
+
+    def on_object_hover_on(self):
+        print(__name__, "on_object_hover_on() Object was hovered on")
+        pass
+
 
     def get_centre_position(self):
         if self.renderer is not None:
