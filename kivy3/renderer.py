@@ -62,7 +62,7 @@ class Renderer(Widget):
     def __init__(self, **kw):
         self.shader_file = kw.pop("shader_file", None)
         self.canvas = Canvas()
-        super(Renderer, self).__init__(**kw)
+        super(Renderer, self).__init__()
 
         with self.canvas:
             clear_color = Color(rgba=(1, 1, 1, 1))

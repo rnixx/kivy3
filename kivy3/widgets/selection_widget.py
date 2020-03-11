@@ -42,11 +42,11 @@ class SelectionWidget(RelativeLayout):
                 return widget.on_object_touch_down(touch)
 
 
-    def on_touch_move(self, touch):
-        if self.collide_point(*touch.pos):
-            widget = self.get_clicked_object(touch)
-            if widget is not None:
-                return widget.on_object_touch_move(touch)
+    # def on_touch_move(self, touch):
+    #     if self.collide_point(*touch.pos):
+    #         widget = self.get_clicked_object(touch)
+    #         if widget is not None:
+    #             return widget.on_object_touch_move(touch)
 
 
     def on_touch_up(self, touch):
