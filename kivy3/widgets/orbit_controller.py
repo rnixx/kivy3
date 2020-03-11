@@ -88,6 +88,7 @@ class OrbitControlWidget(RelativeLayout):
                         self.update_cam()
                 if touch.button == 'left' or touch.button == 'right':
                     touch.ungrab(self)
+                    self.update_cam(instant=True)
                     self.activated = False
 
             return True
@@ -122,11 +123,17 @@ class OrbitControlWidget(RelativeLayout):
                         self.update_cam()
             return True
 
-    def update_cam(self):
+    def update_cam(self, instant=False):
         # self.camera.pos[2] = 1.2
         # print(self.camera.pos)
         # pass
         # self.camera.pos.x = 3.
+        if self.low_pass or instant:
+            self.target = self.sp_target
+            self.radius = self.sp_radius
+            self.phi = self.sp_phi
+            self.theta = self.sp_theta
+
         if self.renderer.camera is not None:
 
             self.renderer.camera.pos[0] = self.radius * math.cos(self.phi) \
