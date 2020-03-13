@@ -128,7 +128,7 @@ class OrbitControlWidget(RelativeLayout):
         # print(self.camera.pos)
         # pass
         # self.camera.pos.x = 3.
-        if self.low_pass or instant:
+        if not self.low_pass or instant:
             self.target = self.sp_target
             self.radius = self.sp_radius
             self.phi = self.sp_phi
