@@ -126,19 +126,19 @@ class OrbitControlWidget(RelativeLayout):
                             self.update_cam()
                     else:
                         # Update target
-                        self.sp_target[0] += 0.001 * (float(touch.dy)
+                        self.sp_target[0] += 0.0005 * (float(touch.dy)
                                                       * math.cos(self.theta) * math.sin(self.phi)
                                                       - float(touch.dx)
                                                       * math.sin(self.theta)) \
                                              * self.radius
                         # y
-                        self.sp_target[2] += 0.001 * (float(touch.dx)
+                        self.sp_target[2] += 0.0005 * (float(touch.dx)
                                                       * math.cos(self.theta)
                                                       + float(touch.dy)
                                                       * math.sin(self.theta) * math.sin(self.phi)) \
                                              * self.radius
                         # z
-                        self.sp_target[1] += 0.001 * -float(touch.dy) * math.cos(self.phi) * self.radius
+                        self.sp_target[1] += 0.0005 * -float(touch.dy) * math.cos(self.phi) * self.radius
                         if not self.low_pass:
                             self.update_cam()
 
@@ -146,7 +146,7 @@ class OrbitControlWidget(RelativeLayout):
 
                         orig_dist = math.sqrt((self.touch1.px-self.touch2.px)**2 + (self.touch1.py-self.touch2.py)**2)
                         new_dist = math.sqrt(((self.touch1.px + touch.dx)-self.touch2.px)**2 + ((self.touch1.py+touch.dy) - self.touch2.py)**2)
-                        factor = 1 + float(new_dist - orig_dist)*0.0025
+                        factor = 1 - float(new_dist - orig_dist)*0.0025
                         self.sp_radius *= factor
                         if not self.low_pass:
                             self.update_cam()
@@ -163,19 +163,19 @@ class OrbitControlWidget(RelativeLayout):
                             self.update_cam()
                     else:
                         # Update target
-                        self.sp_target[0] += 0.001 * (float(touch.dy)
+                        self.sp_target[0] += 0.0005 * (float(touch.dy)
                                                       * math.cos(self.theta) * math.sin(self.phi)
                                                       - float(touch.dx)
                                                       * math.sin(self.theta)) \
                                              * self.radius
                         # y
-                        self.sp_target[2] += 0.001 * (float(touch.dx)
+                        self.sp_target[2] += 0.0005 * (float(touch.dx)
                                                       * math.cos(self.theta)
                                                       + float(touch.dy)
                                                       * math.sin(self.theta) * math.sin(self.phi)) \
                                              * self.radius
                         # z
-                        self.sp_target[1] += 0.001 * -float(touch.dy) * math.cos(self.phi) * self.radius
+                        self.sp_target[1] += 0.0005 * -float(touch.dy) * math.cos(self.phi) * self.radius
                         if not self.low_pass:
                             self.update_cam()
 
@@ -185,7 +185,7 @@ class OrbitControlWidget(RelativeLayout):
                             (self.touch1.px - self.touch2.px) ** 2 + (self.touch1.py - self.touch2.py) ** 2)
                         new_dist = math.sqrt((self.touch1.px - (self.touch2.px+touch.dx)) ** 2 + (
                                     self.touch1.py - (self.touch2.py+touch.dy)) ** 2)
-                        factor = 1 + float(new_dist - orig_dist) * 0.0025
+                        factor = 1 - float(new_dist - orig_dist) * 0.0025
                         self.sp_radius *= factor
                         if not self.low_pass:
                             self.update_cam()
