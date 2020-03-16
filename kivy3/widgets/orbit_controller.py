@@ -21,6 +21,10 @@ class OrbitControlWidget(RelativeLayout):
         self.light = renderer.main_light
         self.low_pass = smooth_cam
 
+        #multitouch controls
+        self.touch1 = None
+        self.touch2 = None
+
         #Setpoint values
         self.sp_target = list(target)
         self.sp_radius = radius
@@ -64,11 +68,16 @@ class OrbitControlWidget(RelativeLayout):
     def on_touch_down(self, touch):
         # print("Touch Down", touch)
         if self.collide_point(*touch.pos):
-            if 'button' in touch.profile:
+            if 'multitouch_sim' in touch.profile or 'button' not in touch.profile:
+                if self.touch1 is None:
+                    self.touch1 = touch
+                elif self.touch2 is None:
+                    self.touch2 = touch
+
+            elif 'button' in touch.profile:
                 if touch.button == 'left' or touch.button == 'right':
                     touch.grab(self)
                     self.activated = True
-
             return True
 
 
@@ -90,12 +99,97 @@ class OrbitControlWidget(RelativeLayout):
                     touch.ungrab(self)
                     self.update_cam(instant=True)
                     self.activated = False
-
+            if 'multitouch_sim' in touch.profile or 'button' not in touch.profile:
+                if self.touch1 and self.touch1.id == touch.id:
+                    self.touch1 = None
+                if self.touch2 and self.touch2.id == touch.id:
+                    self.touch2 = None
             return True
 
     def on_touch_move(self, touch):
         # print("Touch Move", touch)
         if self.collide_point(*touch.pos):
+
+            if 'multitouch_sim' in touch.profile or 'button' not in touch.profile:
+                if self.touch1 and touch.id == self.touch1.id:
+                    self.touch1 = touch
+                    if self.touch2 is None:
+                        self.sp_theta += 0.01 * float(touch.dx)
+                        self.sp_phi -= 0.01 * float(touch.dy)
+                        self.sp_phi = min([self.sp_phi, math.pi / 2])
+                        self.sp_phi = max([self.sp_phi, -math.pi / 2])
+                        if not self.low_pass:
+                            self.update_cam()
+                    else:
+                        # Update target
+                        self.sp_target[0] += 0.001 * (float(touch.dy)
+                                                      * math.cos(self.theta) * math.sin(self.phi)
+                                                      - float(touch.dx)
+                                                      * math.sin(self.theta)) \
+                                             * self.radius
+                        # y
+                        self.sp_target[2] += 0.001 * (float(touch.dx)
+                                                      * math.cos(self.theta)
+                                                      + float(touch.dy)
+                                                      * math.sin(self.theta) * math.sin(self.phi)) \
+                                             * self.radius
+                        # z
+                        self.sp_target[1] += 0.001 * -float(touch.dy) * math.cos(self.phi) * self.radius
+                        if not self.low_pass:
+                            self.update_cam()
+
+                        # Update radius
+
+                        orig_dist = math.sqrt((self.touch1.px-self.touch2.px)**2 + (self.touch1.py-self.touch2.py)**2)
+                        new_dist = math.sqrt(((self.touch1.px + touch.dx)-self.touch2.px)**2 + ((self.touch1.py+touch.dy) - self.touch2.py)**2)
+                        factor = 1 + float(new_dist - orig_dist)*0.0025
+                        self.sp_radius *= factor
+                        if not self.low_pass:
+                            self.update_cam()
+
+
+                elif self.touch2 and touch.id == self.touch2.id:
+                    self.touch2 = touch
+                    if self.touch1 is None:
+                        self.sp_theta += 0.01 * float(touch.dx)
+                        self.sp_phi -= 0.01 * float(touch.dy)
+                        self.sp_phi = min([self.sp_phi, math.pi / 2])
+                        self.sp_phi = max([self.sp_phi, -math.pi / 2])
+                        if not self.low_pass:
+                            self.update_cam()
+                    else:
+                        # Update target
+                        self.sp_target[0] += 0.001 * (float(touch.dy)
+                                                      * math.cos(self.theta) * math.sin(self.phi)
+                                                      - float(touch.dx)
+                                                      * math.sin(self.theta)) \
+                                             * self.radius
+                        # y
+                        self.sp_target[2] += 0.001 * (float(touch.dx)
+                                                      * math.cos(self.theta)
+                                                      + float(touch.dy)
+                                                      * math.sin(self.theta) * math.sin(self.phi)) \
+                                             * self.radius
+                        # z
+                        self.sp_target[1] += 0.001 * -float(touch.dy) * math.cos(self.phi) * self.radius
+                        if not self.low_pass:
+                            self.update_cam()
+
+                        # Update radius
+
+                        orig_dist = math.sqrt(
+                            (self.touch1.px - self.touch2.px) ** 2 + (self.touch1.py - self.touch2.py) ** 2)
+                        new_dist = math.sqrt((self.touch1.px - (self.touch2.px+touch.dx)) ** 2 + (
+                                    self.touch1.py - (self.touch2.py+touch.dy)) ** 2)
+                        factor = 1 + float(new_dist - orig_dist) * 0.0025
+                        self.sp_radius *= factor
+                        if not self.low_pass:
+                            self.update_cam()
+
+
+
+
+
             if 'button' in touch.profile and self.activated:
                 if touch.button == "left":
                     self.sp_theta += 0.01 * float(touch.dx)
