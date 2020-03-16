@@ -77,7 +77,6 @@ class STLObject(Object3D):
             _faces=[]
             _vertices = []
             if (len(self.stl_mesh.v0)-start) >= max_faces:
-                print("Faces are more than max")
                 length = max_faces
 
                 mesh = STLMesh(self.stl_mesh.v0[start:start+length], self.stl_mesh.v1[start:start+length], self.stl_mesh.v2[start:start+length], self.stl_mesh.normals[start:start+length],

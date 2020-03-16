@@ -7,18 +7,18 @@ class ArrowObject(Object3D):
         length = kw.pop('length', 1.)
         radius = kw.pop('radius', length/10.)
         cone_radius = kw.pop('cone_radius', radius*2.)
-        cone_length = kw.pop('cone_length', length/5)
-        cylinder_length = kw.pop('cylinder_length', 4.*length/5)
+        cone_length = kw.pop('cone_length', radius*3.)
+        cylinder_length = kw.pop('cylinder_length', length-(radius*3.))
         super(ArrowObject, self).__init__(**kw)
-        cone = ConeGeometry(cone_radius,length/5.)
+        cone = ConeGeometry(cone_radius, cone_length)
         cone_mesh = Mesh(cone, material)
 
         cylinder = CylinderGeometry(radius=radius, length=cylinder_length)
         cylinder_mesh = Mesh(cylinder, material)
 
-        cone_mesh.position.x = 4*length/5.
+        cone_mesh.position.x = cylinder_length
         cone_mesh.rot.y = 90.
-        cylinder_mesh.position.x = 2.*length/5.
+        cylinder_mesh.position.x = cylinder_length/2.
         cylinder_mesh.rot.y = 90.
         self.add(cone_mesh)
         self.add(cylinder_mesh)

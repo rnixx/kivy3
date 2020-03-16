@@ -98,5 +98,5 @@ class VisualisationApp(App):
 
 if __name__ == '__main__':
     from kivy.config import Config
-    Config.set('input', 'mouse', 'mouse,disable_multitouch')
+    Config.set('input', 'mouse', 'mouse,enable_multitouch')
     VisualisationApp().run()

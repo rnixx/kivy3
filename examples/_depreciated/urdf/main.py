@@ -127,6 +127,6 @@ class MainApp(App):
 if __name__ == '__main__':
     # Disable the orange dot that appears on right clicks.
     from kivy.config import Config
-    Config.set('input', 'mouse', 'mouse,disable_multitouch')
+    # Config.set('input', 'mouse', 'mouse,disable_multitouch')
 
     MainApp().run()
