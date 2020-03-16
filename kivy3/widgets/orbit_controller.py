@@ -71,8 +71,10 @@ class OrbitControlWidget(RelativeLayout):
             if 'multitouch_sim' in touch.profile or 'button' not in touch.profile:
                 if self.touch1 is None:
                     self.touch1 = touch
+                    touch.grab(self)
                 elif self.touch2 is None:
                     self.touch2 = touch
+                    touch.grab(self)
 
             elif 'button' in touch.profile:
                 if touch.button == 'left' or touch.button == 'right':
@@ -102,8 +104,10 @@ class OrbitControlWidget(RelativeLayout):
             if 'multitouch_sim' in touch.profile or 'button' not in touch.profile:
                 if self.touch1 and self.touch1.id == touch.id:
                     self.touch1 = None
+                    touch.ungrab(self)
                 if self.touch2 and self.touch2.id == touch.id:
                     self.touch2 = None
+                    touch.ungrab(self)
             return True
 
     def on_touch_move(self, touch):
