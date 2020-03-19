@@ -62,11 +62,12 @@ class SelectionWidget(RelativeLayout):
     #             return widget.on_object_touch_move(touch)
 
 
-    def on_touch_up2(self, touch):
+    def on_touch_up(self, touch):
         self.grabbed = False
         if self.collide_point(*touch.pos):
             widget = self.get_clicked_object(touch)
             if widget is not None:
+                # print("Touched up")
                 return widget.on_object_touch_up(touch)
 
 
