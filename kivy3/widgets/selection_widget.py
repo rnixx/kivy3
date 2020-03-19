@@ -20,7 +20,7 @@ class SelectionWidget(RelativeLayout):
         #print(__name__, "fbo:size", self.renderer.fbo.texture.size)
         self.last_sel_image = Texture.create(self.renderer.fbo.texture.size, colorfmt='rgba', bufferfmt='ubyte')
         self.last_hover_color = (0,0,0)
-        Window.bind(mouse_pos=self.on_move)
+        # Window.bind(mouse_pos=self.on_move)
 
         self.grabbed = False
 
@@ -62,7 +62,7 @@ class SelectionWidget(RelativeLayout):
     #             return widget.on_object_touch_move(touch)
 
 
-    def on_touch_up(self, touch):
+    def on_touch_up2(self, touch):
         self.grabbed = False
         if self.collide_point(*touch.pos):
             widget = self.get_clicked_object(touch)
@@ -70,7 +70,7 @@ class SelectionWidget(RelativeLayout):
                 return widget.on_object_touch_up(touch)
 
 
-    def on_move(self, type, pos):
+    def on_move2(self, type, pos):
         if self.grabbed:
             return
         if self.last_sel_image is not None:
