@@ -17,6 +17,7 @@ class SelectionWidget(RelativeLayout):
         self.object_dict = {}
         self.renderer = renderer
         self.touch = None
+        self.last_touched_object = None
         #print(__name__, "fbo:size", self.renderer.fbo.texture.size)
         self.last_sel_image = Texture.create(self.renderer.fbo.texture.size, colorfmt='rgba', bufferfmt='ubyte')
         self.last_hover_color = (0,0,0)
@@ -52,23 +53,26 @@ class SelectionWidget(RelativeLayout):
             widget = self.get_clicked_object(touch)
             if widget is not None:
                 # print("Touched down")
+                self.last_touched_object = widget
                 return widget.on_object_touch_down(touch)
 
-
-    # def on_touch_move(self, touch):
-    #     if self.collide_point(*touch.pos):
-    #         widget = self.get_clicked_object(touch)
-    #         if widget is not None:
-    #             return widget.on_object_touch_move(touch)
-
+        # def on_touch_move(self, touch):
+        #     if self.collide_point(*touch.pos):
+        #         widget = self.get_clicked_object(touch)
+        #         if widget is not None:
+        #             return widget.on_object_touch_move(touch)
 
     def on_touch_up(self, touch):
         self.grabbed = False
-        if self.collide_point(*touch.pos):
-            widget = self.get_clicked_object(touch)
-            if widget is not None:
-                # print("Touched up")
-                return widget.on_object_touch_up(touch)
+        if self.last_touched_object:
+            widget = self.last_touched_object
+            self.last_touched_object = None
+            return widget.on_object_touch_up(touch)
+        # if self.collide_point(*touch.pos):
+        #     widget = self.get_clicked_object(touch)
+        #     if widget is not None:
+        #         # print("Touched up")
+        #         return widget.on_object_touch_up(touch)
 
 
     def on_move2(self, type, pos):

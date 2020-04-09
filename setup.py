@@ -16,7 +16,7 @@ for root, subFolders, files in walk('examples'):
 
 setup(
     name='kivy3',
-    version='20.04.07',
+    version='20.04.09',
     description='Kivy extensions for 3D graphics',
     author='Niko Skrypnik',
     author_email='nskrypnik@gmail.com',
