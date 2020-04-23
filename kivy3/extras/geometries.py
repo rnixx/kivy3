@@ -122,8 +122,8 @@ class CylinderGeometry(Geometry):
 
 
 
-            top_vertices.append((x,y,0.5 * float(self.length)))
-            bottom_vertices.append((x,y,-0.5 * float(self.length)))
+            top_vertices.append([x,y,0.5 * float(self.length)])
+            bottom_vertices.append([x,y,-0.5 * float(self.length)])
 
         _cylinder_vertices = top_vertices + bottom_vertices
         _cylinder_normals = cylinder_side_normals + cylinder_side_normals
