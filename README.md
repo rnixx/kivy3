@@ -10,21 +10,26 @@ Camera, Scene, Renderers, loaders you may use to load 3D objects.
 
 # Installation
 
-First make sure that you have all dependencies installed on your machine.
+First create a virtual environment.
 
-    $ pip install Cython==0.29.9
-    $ pip install kivy==1.11.1
-    $ pip install numpy
-    $ pip install scipy
-    $ pip install numpy-stl
-    $ pip install urdf_parser_py
+    $ python3 -m venv .
+
+Install all needed dependencies.
+
+    $ ./bin/pip install Cython==0.29.9
+    $ ./bin/pip install kivy==1.11.1
+    $ ./bin/pip install numpy
+    $ ./bin/pip install scipy
+    $ ./bin/pip install numpy-stl
+    $ ./bin/pip install https://github.com/ros-infrastructure/catkin_pkg/archive/0.4.17.tar.gz
+    $ ./bin/pip install https://github.com/ros/urdf_parser_py/archive/0.4.3.tar.gz
 
 For further info about kivy visit
 [Kivy documentation](https://kivy.org/docs/installation/installation.html).
 
 After successful Kivy installation install Kivy3 with this:
 
-    $ pip install https://github.com/JohnSumskas/kivy3/zipball/sbarlowbpl/john_merger
+    $ ./bin/pip install https://github.com/JohnSumskas/kivy3/zipball/sbarlowbpl/john_merger
 
 # Packaging kivy3
 
