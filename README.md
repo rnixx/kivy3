@@ -10,17 +10,21 @@ Camera, Scene, Renderers, loaders you may use to load 3D objects.
 
 # Installation
 
-First make sure that you have `kivy` installed on your machine. Mostly
-a simple:
+First make sure that you have all dependencies installed on your machine.
 
-    $ pip install kivy
+    $ pip install Cython==0.29.9
+    $ pip install kivy==1.11.1
+    $ pip install numpy
+    $ pip install scipy
+    $ pip install numpy-stl
+    $ pip install urdf_parser_py
 
-should be sufficient, but stable version will not include the latest features.
-For further info visit
+For further info about kivy visit
 [Kivy documentation](https://kivy.org/docs/installation/installation.html).
+
 After successful Kivy installation install Kivy3 with this:
 
-    $ pip install https://github.com/KeyWeeUsr/kivy3/zipball/master
+    $ pip install https://github.com/JohnSumskas/kivy3/zipball/sbarlowbpl/john_merger
 
 # Packaging kivy3
 
