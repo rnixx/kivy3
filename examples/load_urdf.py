@@ -5,7 +5,8 @@ from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 from kivy3 import Mesh, Material
-from kivy3 import Scene, Renderer, PerspectiveCamera, OrbitControl
+from kivy3 import Scene, Renderer, PerspectiveCamera
+from kivy3.widgets import OrbitControlWidget
 from kivy3.extras.geometries import BoxGeometry, CylinderGeometry, SphereGeometry
 from kivy3.loaders import OBJLoader, STLLoader
 from kivy.uix.widget import Widget
@@ -58,7 +59,7 @@ class SceneApp(App):
 
         root.add_widget(self.renderer)
 
-        orbit = OrbitControl(self.renderer, 4.)
+        orbit = OrbitControlWidget(self.renderer, 4.)
 
         root.add_widget(orbit)
 
