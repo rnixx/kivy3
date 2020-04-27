@@ -6,4 +6,9 @@ MANIFEST
 dist
 *.egg-info
 venv/
+bin/
+lib/
+lib64
+pyvenv.cfg
+share/
 .idea/
