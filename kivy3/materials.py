@@ -45,7 +45,7 @@ class Material(ChangeState):
 
     def __init__(self, map=None, transparency=1.0, color=(1, 1, 1),
                  diffuse=(0, 0, 0), specular=(0, 0, 0),
-                 shininess=10.0, texture_ratio=0.0, id_color=(0, 0, 0), **kwargs):
+                 shininess=10.0, texture_ratio=0.0, id_color=None, **kwargs):
         self.map = map
         super(Material, self).__init__()
         transparency = float(transparency)
@@ -55,8 +55,8 @@ class Material(ChangeState):
         shininess = float(shininess)
         texture_ratio = float(texture_ratio)
 
-        if id_color == (0,0,0):
-            id_color = (0,0,0,0)
+        if id_color == None:
+            id_color = [0., 0., 0., 0.]
         else:
             id_color = list(id_color)
             id_color[0] = id_color[0]/255.
@@ -70,7 +70,7 @@ class Material(ChangeState):
             setattr(self, k, v)
 
     def clear_id(self):
-        setattr(self,id_color,(0,0,0,0))
+        setattr(self,"id_color",(0,0,0,0))
 
     def __setattr__(self, k, v):
         if k in MATERIAL_TO_SHADER_MAP:

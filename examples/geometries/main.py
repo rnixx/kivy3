@@ -1,5 +1,4 @@
 import os
-os.environ["KIVY_NO_CONSOLELOG"] = "1"
 import math
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
@@ -83,7 +82,6 @@ class VisualisationWidget(FloatLayout):
         self.camera.pos.z = 1.5
         self.camera.look_at((0, 0, 0))
 
-
         self.camera.bind_to(self.renderer)
         self.renderer.render(scene, self.camera)
 
@@ -110,5 +108,5 @@ class VisualisationApp(App):
 
 if __name__ == '__main__':
     from kivy.config import Config
-    Config.set('input', 'mouse', 'mouse,disable_multitouch')
+    # Config.set('input', 'mouse', 'mouse,disable_multitouch')
     VisualisationApp().run()

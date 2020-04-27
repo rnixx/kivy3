@@ -12,7 +12,7 @@ from kivy.core.image import Image
 from kivy3 import Scene, Renderer, PerspectiveCamera
 from kivy3.extras.geometries import PlaneGeometry, ConeGeometry, BoxGeometry, CylinderGeometry, SphereGeometry, GridGeometry
 from kivy3.extras.objects import ArrowObject, AxisObject
-from kivy3.loaders import URDFLoader, STLLoader
+from kivy3.loaders import URDFLoader
 from kivy3 import Mesh, Material, Object3D
 from kivy3.objects.lines import Lines
 from kivy3.widgets import OrbitControlWidget, SelectionWidget, Object3DWidget
@@ -25,7 +25,7 @@ from kivy.graphics.opengl import glEnable, glDisable, GL_DEPTH_TEST, glReadPixel
 _this_path = os.path.dirname(os.path.realpath(__file__))
 shader_file = os.path.join(_this_path, "../blinnphong.glsl")
 obj_file = os.path.join(_this_path, "./monkey.obj")
-stl_file = os.path.join(_this_path, "./stl_mesh.stl")
+stl_file = os.path.join(_this_path, "./test.stl")
 urdf_file = os.path.join(_this_path, "./rs1_description/urdf/generated_rs1_parallel.urdf")
 package_path = os.path.join(_this_path, "./") # parent of the package path
 arrow_img_file = os.path.join(_this_path, "./assets/icon-rotate-360.png")
@@ -38,7 +38,6 @@ class VisualisationWidget(FloatLayout):
     def __init__(self, **kw):
         super(VisualisationWidget, self).__init__(**kw)
 
-
         self.renderer = Renderer(shader_file=shader_file)
         self.renderer.set_clear_color((.16, .30, .44, 1.))
 
@@ -46,20 +45,16 @@ class VisualisationWidget(FloatLayout):
 
         base = Object3D()
         # id_color = (1,0,0)
-        material = Material(color=(1.,0 , 1,), diffuse=(1., 0, 1.),
-                            specular=(.35, .35, .35))
-        stl_loader = STLLoader()
-        stl_object = stl_loader.load(stl_file, material)
-        stl_object.pos.z = 0.3
-        #object1 = Mesh(geometry, material)
+
+        object1 = AxisObject(length=0.5, alpha=0.4)
 
 
-        base.add(stl_object)
+        base.add(object1)
 
-        geometry = GridGeometry()
-        material = Material(color=(1., 1., 1.), diffuse=(1., 1., 1.),
-                            specular=(.35, .35, .35), transparency=.3)
-        object = Lines(geometry, material)
+
+        material = Material(color=(0,0.3,0), diffuse=(0,0.3,0), specular=(0.3,0.3,0.3))
+        object = ArrowObject(material, length=0.5, radius=0.04)
+        object.pos.y = 1
         base.add(object)
 
         base.rot.x = -90

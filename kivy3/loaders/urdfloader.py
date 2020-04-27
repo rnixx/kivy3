@@ -61,7 +61,7 @@ class Joint():
             # TODO
             pass
         else:
-            print("No position possible to set")
+            # print("No position possible to set")
             return
 
         for m_joint in self.mimic_joints:
@@ -108,7 +108,7 @@ class Joint():
 
 
 class URDFObject(Object3D):
-    ''' This is a 3d Object to hold information about a urdf '''
+    """ This is a 3d Object to hold information about a urdf """
     def __init__(self, urdf, package_path, base_link="base_link", **kw):
         super(URDFObject, self).__init__(**kw)
         self.urdf = urdf
@@ -169,7 +169,6 @@ class URDFObject(Object3D):
                         visual.geometry.filename.replace('package:/',
                                                          self.package_path)
 
-                    print(material)
                     mesh = self.stlloader.load(filename, material)
 
                 elif visual.geometry.XML_REFL.tag == "cylinder":

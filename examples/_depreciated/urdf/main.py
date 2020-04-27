@@ -58,7 +58,7 @@ class MainApp(App):
 
         # robot = URDF.from_xml_file('./RS2-1032-segmented-def.SLDASM/urdf/RS2-1032-segmented-def.SLDASM.urdf')
         # robot = URDF.from_xml_file('./RS2-1021-segmented-def-urdf/urdf/RS2-1021-segmented-def-urdf.urdf')
-        robot = URDF.from_xml_file('./RS2-7FN-Def-URDF-Exp/urdf/RS2-7FN-Def-URDF-Exp.urdf')
+        robot = URDF.from_xml_file('RS2-7FN-Def-URDF-Exp/urdf/RS2-7FN-Def-URDF-Exp.urdf')
         link_dict = {}
 
         for link in robot.links:
@@ -127,6 +127,6 @@ class MainApp(App):
 if __name__ == '__main__':
     # Disable the orange dot that appears on right clicks.
     from kivy.config import Config
-    Config.set('input', 'mouse', 'mouse,disable_multitouch')
+    # Config.set('input', 'mouse', 'mouse,disable_multitouch')
 
     MainApp().run()

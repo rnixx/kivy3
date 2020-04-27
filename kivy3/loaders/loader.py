@@ -60,7 +60,7 @@ class BaseLoader(object):
         else:
             super(BaseLoader, self).__setattr__(k, v)
 
-    def load(self, source, on_load=None, on_progress=None, on_error=None):
+    def load(self, source, on_load=None, on_progress=None, on_error=None, **kw):
         """This function loads objects from source. This function may work
         in both synchronous or asynchronous way. To make it asynchronous
         on_load callback function should be provided.
@@ -68,7 +68,7 @@ class BaseLoader(object):
         self.source = source
 
         if not callable(on_load):
-            return self.parse()
+            return self.parse(**kw)
 
         def _async_load(dt):
             obj = self.parse()
@@ -76,7 +76,7 @@ class BaseLoader(object):
 
         Clock.schedule_once(_async_load, 0)
 
-    def parse(self):
+    def parse(self, **kw):
         """ This should be overridden in subclasses to provide
         parse of the source and return loaded from source object
         """

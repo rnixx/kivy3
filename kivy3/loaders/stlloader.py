@@ -16,6 +16,7 @@ DEFAULT_VERTEX_FORMAT = [
 ]
 DEFAULT_MESH_MODE = 'triangles'
 
+
 class STLMesh(Object3D):
     def __init__(self, v0, v1, v2, normals, material, **kw):
         super(STLMesh, self).__init__(**kw)
@@ -76,7 +77,6 @@ class STLObject(Object3D):
             _faces=[]
             _vertices = []
             if (len(self.stl_mesh.v0)-start) >= max_faces:
-                print("Faces are more than max")
                 length = max_faces
 
                 mesh = STLMesh(self.stl_mesh.v0[start:start+length], self.stl_mesh.v1[start:start+length], self.stl_mesh.v2[start:start+length], self.stl_mesh.normals[start:start+length],
@@ -122,6 +122,7 @@ class STLLoader(BaseLoader):
 
 
         stl_object = STLObject(stl,self.material)
+        # stl_object.scale=[0.5,1,1]
 
 
 
